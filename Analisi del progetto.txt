@@ -1,0 +1,58 @@
+
+Incrocio e terreno:
+L'idea è creare una struttura 2D (l'incrocio) sfruttando dei "cubi"
+
+I cubi saranno di 5 tipologie
+	- Direzione semplice (avanti/indietro - DX/SX)
+	- Direzione complessa (svoltaDX/svoltaSX)
+	- Cubo centrale (verticale/orizzontale in combo)
+	- Cubi di spawn (entrate incrocio)
+	- Cubi di despawn (uscite incrocio)
+	- Sarà sufficiente "ruotarli" per ottenere una variazione della direzione (ruotare vagone merci)
+
+All'interno dei cubi di direzione semplice cè una logica per la quale un veicolo può:
+	- Cambiare corsia
+	- Il cambio può essere fatto piu volte, anche se il cubo è occupato (distrazione)
+
+
+Il veicolo:
+L'idea è integrare la fisica usando la libreria "pymunk".
+Cosa servirà:
+	- Classe veicolo:
+		-Tipo			Oltre a questo sappiamo che dovrà anche ruotare e frenare realisticamente,
+		-Dimensione		la lista và dunque ampliata.
+		-Coeff. attr. gomme
+		-Velocità
+		-CND freni
+
+Ordine del programma: 
+
+	- Genero le finestre di gioco -> 	TERRENO [Fullscreen toggle, (px X * px Y) base da definire, così come vsync ecc., tasto per uscire] - 
+						STATISTICS [macchine spawnate, macchine incidentate, macchine attuali, T/p/U%/h, #switch corsia]
+						SETTINGS [Cursori per regolare parametri ingame]
+
+	- Visualizzo negli schermi le informazioni, in particolare nel TERRENO:
+		- La mappa di gioco + semafori (indipendenti?, la logica di cambio del colore è già fatta nel vecchio codice)
+		- Dopo n secondi inizia lo spawn dei veicoli
+		- Il gioco continua fino a quando non lo chiudo io.
+
+			-Creo finestra
+			-Carico la mappa
+			-Carico i semafori
+			-Genero la classe macchina
+			-Spawno il veicolo:
+				-Il veicolo picka una strada in cui spawnare (regolato da: 25% per le ore "scialle" della giornata, 75% in una sola via (a rotazione in 4 fasi della giornata))
+				-Il veicolo picka una strada in cui despawnare (regolato da: 33.3% per le ore "scialle" della giornata, 85% in una sola via (a rotazione in 4 fasi della giornata))
+					-Il veicolo ha una % di probabilità di cambiare corsia, minore è la distanza con il semaforo (< # di cubi) e minore la probabilità.
+						-Quindi il veicolo può spawnare dove gli pare, e solo DOPO decide dove andare, ammettiamo che non sappia la strada? è un pò insensato, io so dove andare
+							-Allora facciamo fare una scelta: spawno e so dove andare, oppure spawno e decido in un secondo momento (quando sono in un particolare cubo)
+					-La % viene calcolata secondo un numero iniziale del 10% di fare il cambio, poi cè un secondo fattore -> il cubo a fianco è libero? 
+						se SI -> ok vai
+						se NO -> al 90% non cambio, al 10% cambio e creo incidente/ritardo (casualità)
+							se il veicolo crasha -> rimosso, crash_counter+1, e si continua
+				-Il veicolo arriva al semaforo: rispetta la logica del semaforo
+				-Il veicolo frena se serve altrimenti prosegue, sempre attento alla distanza di sicurezza: se il "quadrato visivo" tocca un veicolo: 
+					-Attento -> si ferma (95%)
+					-Mona 	 -> non si ferma (5%) -> crasha -> rimosso, crash_counter+1, e si continua
+				-Il veicolo arriva al cubo di despawn. Muore.
+			
