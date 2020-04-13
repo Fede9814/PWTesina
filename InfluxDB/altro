@@ -1,0 +1,29 @@
+ [{
+ 	"measurement": "Traffic_test_JSON",
+ 	"tags": {
+ 		"host": "test",
+ 		"region": "solsystem"
+ 	},
+ 	"time": "2009-11-10T23:00:00Z",
+ 	"fields": {
+ 		"spawns": {
+ 			"counter_N_+": 32,
+ 			"counter_S_+": 30,
+ 			"counter_E_+": 12,
+ 			"counter_W_+": 5
+ 		},
+ 		"deSpawns": {
+ 			"counter_N_-": 23,
+ 			"counter_S_-": 26,
+ 			"counter_E_-": 9,
+ 			"counter_W_-": 23
+ 		},
+ 		"Accidents": {
+ 			"total": 3,
+ 			"Deaths": 6,
+ 			"Injured": 2,
+ 			"n_involvedvehicles": 5
+ 		}
+ 	}
+ }
+ ]

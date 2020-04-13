@@ -1,0 +1,1 @@
+- Per aprire il file con il flowchart scaricare sto software: http://dia-installer.de
