@@ -1,5 +1,5 @@
-Note: 
-	
+Note:
+ 
 	- In sto file cè l'analisi del problema, con le varie considerazioni e diversi punti di vista/modi
 	  approcciarsi ai problemi del progetto.
 	- C'è letteralmente di tutto riguardo gli aspetti pratici, dalla fisica per le ruote alla logica dei semafori 
@@ -7,6 +7,7 @@ Note:
 	- Ci sono una VALANGA di italianizzazioni nei termini.
 	- Se ci sono errori siete liberi di correggerli, dai typo fino a formule scritte male.
 	- L'indentazione è voluta, serve per capire "cosa è figlio di cosa" e quando mi riconnetto ad una frase scritta qualche riga sopra.
+	- Per testare query leggere Execution_Order.md
 
 Richieste:
 	- Vedi Word "PW_Consegna.rtf"
@@ -24,6 +25,8 @@ Usefull stuff:
 	https://realpython.com/arcade-python-game-framework/#background-and-setup
 	https://docs.python.org/2/library/threading.html#timer-objects
 	https://realpython.com/intro-to-python-threading/#timer
+	https://docs.influxdata.com/influxdb/v1.6/tools/shell/#write-data-to-influxdb-with-insert
+	https://stackoverflow.com/questions/40119730/inserting-data-into-influxdb-using-python-client-with-line-protocol
 
 Incrocio e terreno:
 L'idea è creare una struttura 2D (l'incrocio) sfruttando dei "cubi":

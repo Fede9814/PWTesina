@@ -103,7 +103,7 @@ if len(listUsers) != 0:
             else:
                 dbClient.switch_database(main_DB)
 
-#Trial code to test the _internal InfluxDB database. Works just fine...in another .py file tho .-.
-get = dbClient.query(("""SELECT * FROM cpu"""))
+
+get = dbClient.write_points(())
 cpu_points = list(get.get_points(measurement='cpu'))
 print(cpu_points, get)
