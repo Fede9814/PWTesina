@@ -27,6 +27,7 @@ Usefull stuff:
 	https://realpython.com/intro-to-python-threading/#timer
 	https://docs.influxdata.com/influxdb/v1.6/tools/shell/#write-data-to-influxdb-with-insert
 	https://stackoverflow.com/questions/40119730/inserting-data-into-influxdb-using-python-client-with-line-protocol
+	https://getkotori.org/docs/handbook/influxdb.html
 
 Incrocio e terreno:
 L'idea è creare una struttura 2D (l'incrocio) sfruttando dei "cubi":
