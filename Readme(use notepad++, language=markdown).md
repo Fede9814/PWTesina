@@ -93,8 +93,8 @@ Come dovrebbe funzionare un cubo?
 	- Cubo decisionale: in riferimento alla "scelta" che un veicolo può compiere, sto cubo gestisce le variazioni di percorso.
 		- Il veicolo tocca il cubo, viene posto un controllo:
 			- Vuoi andare dritto sulla tua strada? (n% di probabilità (n≈100))
-			- Vuoi cambiare corsia? (m% di probabilità (m<<n!)) (sta cosa nella realtà simula il 
-			  mona che cambia corsia per sorpassare (tipo in autostrada) o perchè sà dove andare 
+			- Vuoi cambiare corsia? (m% di probabilità (m<<n!)) (sta cosa nella realtà simula lla persona
+			  che cambia corsia per sorpassare (tipo in autostrada) o perchè sà dove andare 
 			  ma non come arrivarci e magari la prima volta fà la strada sbagliata)
 			- Vuoi cambiare corsia E percorso? (o% di probabilità (o<<m<<n!))
 			- Adesso è necessario fare un ragionamento:
@@ -109,9 +109,9 @@ Analisi del terreno:
 		- Tiles per:
 			- Corsia (standard, con strisce di corsia, stop, frecce)
 			- Striscie pedonali
-			- Erba (e magari do pini)
-			- Segnaletica (pimpinot dee strisse, e strisse ecc...)
-			- Manca altro? (vedé valtri)
+			- Erba
+			- Segnaletica 
+			- Manca altro?
 	
 	- Veicoli
 		- 4 Sprites/macchina
@@ -139,13 +139,14 @@ Analisi sul veicolo:
 	- Tipo: Diciamo 3 varianti
 		- Macchina
 		- Camion
-		- Motorin
+		- Moto
 		
-	- Dimensione: A conti fatti, se la dimensione della macchina è 2, allora camion è 4 e motorin 1. Quindi immaginando la cosa in uno sprite cio che abbiamo sarebbe: 
+	- Dimensione: A conti fatti, se la dimensione della macchina è 2, allora camion è 4 e moto 1. Quindi immaginando la cosa in uno sprite cio che abbiamo sarebbe: 
 		- Macchina: 70*30
 		- Camion: 140*60
 		- Motorin: 35*15
-			- Ovviamente ste misure sono approssimative e verranno modificate di sicuro. Questo perchè l'oggetto dipende dalla mappa e non il contrario.
+			- Ovviamente ste misure sono approssimative e verranno modificate di sicuro. 
+			  Questo perchè l'oggetto dipende dalla mappa e non il contrario.
 			
 	- Coefficiente di attrito:
 		- Fisica in da houze: qua inizia il bello, i coefficienti di attrito variano a seconda di diversi fattori:
@@ -165,9 +166,11 @@ Analisi sul veicolo:
 						Physics 101: 
 							- Attrito: si manifesta tra corpo e superficie, è di tipo vettoriale ed è opposta in verso alla direzione di moto (rema contro)
 								- La formula, che se ne frega se l'attrito è statico o dinamico, è questa:
-									- F(a) = μ * F(┴) dove F(┴) è la forza che spinge verso il terreno il corpo, ora convinti del fatto che F = m*a e che "a" se punto verso il basso è g (9.81m/s^2)
+									- F(a) = μ * F(┴) dove F(┴) è la forza che spinge verso il terreno il corpo, ora convinti del fatto che F = m*a e 
+									  che "a" se punto verso il basso è g (9.81m/s^2):
 									  La formula diventa: F(a) = μ * m * g Not bad eh? Beh sta roba è costante. g non varia, m non varia, e μ pure. 
-									  Ora, da questa formula otteniamo una verità: Se la forza con cui spingo il corpo in avanti non supera il valore della forza di attrito F(a) il corpo sta fermo. 
+									  Ora, da questa formula otteniamo una verità: Se la forza con cui spingo il corpo in avanti non supera il valore della 
+									  forza di attrito F(a) il corpo sta fermo. 
 									  
 									  """Sia chiaro che F(┴) può essere scritta come sopra fintanto che sto su un piano. 
 										 In un piano inclinato conta anche il valore dell'angolo, ma a noi non interessa."""
@@ -220,7 +223,7 @@ I semafori:
 				Come possiamo risolvere?
 	
 	Alternativa I: 
-	"4 tempi brumbrum": 	
+	"4 tempi": 	
 							1° blocco tutti avanti e a destra per n secondi
 							2° blocco tutti a sinistra per m secondi
 							(m<n)
@@ -252,7 +255,7 @@ I semafori:
 													  bloccando quelli che devono uscire -> congestione da chilo)
 											  
 	Alternativa II:
-		"La coppia che scoppia"  
+		"Coppia"  
 							1° blocco: 2 A/DX (NORD/SUD + SX)
 							2° blocco: 2 A/DX (EST/OVEST + SX)
 							Analisi:
@@ -274,29 +277,27 @@ I semafori:
 										  Dunno man, dunno...
 	
 	Alternativa III:
-		"A pincionada da paura" (vedi file "Incrocio_101.pdf")
-			- Sattu cossa che le un semaforo attuà dal traffico? El top le, a fine del mondo, na canonada da chio.
+		"Simile alla realtà" (vedi file "Incrocio_101.pdf")
 				- I semafori sono permarossi (leggi Eccezione)
 				- I semafori hanno un tmax
 				- I semafori hanno un contatore dei veicoli dentro le strade E dentro l'incrocio stesso
 				- Nella realtà sti semafori hanno un campo visivo. Ma niantri sen i pi pincioni, e metten un contator. Taaaaaac. Ez clap no re.
 					- Sattu cossa che vol dir?
-						  SEPARCASO n_veicoli_strada_NS_DRITTA_DX > n_veicoli_strada_EO_DRITTA_DX
-							EORA semaforo_EO_DRITTA_DX.luce = ros 
+						  SE n_veicoli_strada_NS_DRITTA_DX > n_veicoli_strada_EO_DRITTA_DX
+							ALLORA semaforo_EO_DRITTA_DX.luce = ros 
 								 E
 								 semaforo_NS_DRITTA_DX.luce = verde
-					- Se vede che no son bon de programmar, ma a storia de fiorintento a e sta quà:
+								 
 						Se il numero di macchine in una entrata è molto alto oppure è l'unica strada ad avere macchine il semaforo diventa
 						verde. 
 							- Eccezione: la luce dell'ultimo semaforo che è diventato verde RESTA verde finchè non cè richiesta da parte
 							  di altre strade per far passare macchine, cussi no perden tempo
 							  
 	Alternativa IV: 
-		"Quel giust"
+		"Quello giustoo"
 			- E' un mix di semafori
 			- Funziona in modo semi-autonomo
-			- Non dovrebbe essere impestato da fare
-				
+
 				Premessa: Cosa serve per farlo?
 					
 					Sulla mappa:
@@ -376,7 +377,7 @@ Ordine del programma:
 				-Il veicolo arriva al semaforo: rispetta la logica del semaforo
 				-Il veicolo frena se serve altrimenti prosegue, sempre attento alla distanza di sicurezza: se il "quadrato visivo" tocca un veicolo: 
 					-Attento -> si ferma (95%)
-					-Mona 	 -> non si ferma (5%) -> crasha -> rimosso, crash_counter+1, e si continua
+					-Non att.-> non si ferma (5%) -> crasha -> rimosso, crash_counter+1, e si continua
 				-Il veicolo arriva al cubo di despawn. Muore.
 	- In ogni istante i dati dovranno essere monitorati, ci saranno dei counter
 	
@@ -390,7 +391,6 @@ Sezione I: Sulla connessione ai DB
 			- Fare script .bat/exe per avviare con un click:
 				- Il servizio/server di InfluxDB/Chronograf (InfluxDB.bat)	-> FATTO!
 				- Il File Server_connector_InfluxDB.py			-> Aggiunto nello script
-				- Il File Server_connector_MySQL.py				-> Aggiunto nello script
 				- Il File Main.py del programma					-> Aggiunto nello script
 			
 			- Fare foglio .py con dentro le stringhe di connessione ad InfluxDB
@@ -403,8 +403,8 @@ Sezione I: Sulla connessione ai DB
 				  
 				- Fare metodo che controlla se un utente esiste, se non cè ne crea uno.		-> FATTO!
 					- Neanche sta roba esiste in InfluxDB, in parole povere non esiste un metodo che 
-					  lo faccia da solo. Ho dovuto inventarmi codice, e beh, FUNZIONA! YEYYYY Ez clap no re.
-					  (No, ez proprio no, è stato un bagno di sangue)
+					  lo faccia da solo. Ho dovuto inventarmi codice, e beh, 
+					  FUNZIONA! YEYYYY Ez clap no re.
 					  
 				- Fare foglio .py con dentro le stringhe di connessione a MySQL				-> In corso
 			
