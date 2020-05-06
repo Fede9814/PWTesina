@@ -1,5 +1,6 @@
 import arcade
 import os
+from car import *
 
 from map import *
 
@@ -27,6 +28,7 @@ class Screen_Class(arcade.Window):
                     arcade.draw_rectangle_filled(x, y, 60, 60, arcade.color.RED)
                 x = x + 60
             y = y - 60
+        self.car_list.draw()
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F:
