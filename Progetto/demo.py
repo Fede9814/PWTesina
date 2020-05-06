@@ -1,5 +1,5 @@
 import arcade
-from Screen import *
+from screen import *
 
 Screen_Class.createWindow()
 
