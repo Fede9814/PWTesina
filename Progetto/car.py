@@ -5,7 +5,8 @@ import pymunk
 import shape
 import timeit
 import numpy
-
+import math
+ 
 """
 ordine:
 
@@ -21,8 +22,6 @@ est = 3
 ovest = 4
 cardinali = [nord, sud, est, ovest]
 car_list = None
-car.center_x = 
-car.center_y = 
 
 class Car(pygame.sprite.Sprite):
     
@@ -54,13 +53,3 @@ class Car(pygame.sprite.Sprite):
         elif(self.colore == 5):
             self.car = arcade.Sprite("path_to_the_car_png", 0.5)
             self.car_list.append(self.car)
-
-    def on_update(self, delta_time):
-        """All the logic to move, and the game logic goes here. """
-
-        self.frame_count += 1
-
-        # Loop through each enemy that we have
-        for car in self.car_list:
-            start_x = enemy.center_x
-            start_y = enemy.center_y
