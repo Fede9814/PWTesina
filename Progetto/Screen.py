@@ -8,13 +8,14 @@ class window(arcade.Window):
 
     def __init__(self):
         super().__init__(width=1920, height=1080, title="Traffic Simulator", fullscreen=False)
+        self.cube_list = []
 
     def on_draw(self):
         y = 1050;
         for j in map:
             x = 30;
             for i in j:
-                cube(x-30, y-30, x, y, i)
+                self.cube_list.append(cube(x-30, y-30, x, y, i))
                 x = x + 60
             y = y - 60
 

@@ -15,6 +15,7 @@ class cube():
             if(j[0] == pos_x and j[1] == pos_y):
                 self.name = j[2] 
                 self.pos = j[3]
+                self.sens = j[4]
         cube = None
         if(self.val == 0):
             cube = arcade.load_texture("../Concept Art/Blocks/bound.png")
@@ -32,9 +33,7 @@ class cube():
             cube = arcade.load_texture("../Concept Art/Blocks/stop.png")
             cube.draw_scaled(self.center_x, self.center_y)
         self.cube = cube
-
-
     
-    
-
-        
+#    def next_step(self, pos_x, pos_y):
+#        for j in points:
+#            if(j[0] == pos_x and j[1] == pos_y):
