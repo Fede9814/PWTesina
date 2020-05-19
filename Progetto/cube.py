@@ -9,6 +9,7 @@ class cube():
         self.center_y = center_y
         self.val = val
         self.recognition(self.pos_x, self.pos_y)
+        self.next_step()
 
     def recognition(self, pos_x, pos_y):
         for j in points:
@@ -52,35 +53,101 @@ class cube():
             cube.draw_scaled(self.center_x, self.center_y)
         self.cube = cube
     
-#    def next_step(self):
-#        for j in points:
-#            if(j[0] == self.pos_x and j[1] == self.pos_y):
-#                if(self.pos == "nord"):
-#                    if(self.sens == "in"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                    if(self.sens == "out"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                if(self.pos == "sud"):
-#                    if(self.sens == "in"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                    if(self.sens == "out"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                if(self.pos == "est"):
-#                    if(self.sens == "in"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                    if(self.sens == "out"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                if(self.pos == "ovest"):
-#                    if(self.sens == "in"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
-#                    if(self.sens == "out"):
-#                        if(self.cors == "left"):
-#                        if(self.cors == "right"):
+    def next_step(self):
+        for j in points:
+            if(j[0] == self.pos_x and j[1] == self.pos_y):
+                if(j[2] == "strada" or j[2] == "start"):
+                    if(self.pos == "nord"):
+                        if(self.sens == "in"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x
+                                self.next_left_y = self.pos_y - 60
+                                self.next_right_x = self.pos_x - 60
+                                self.next_right_y = self.pos_y - 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x + 60
+                                self.next_left_y = self.pos_y - 60
+                                self.next_right_x = self.pos_x
+                                self.next_right_y = self.pos_y - 60
+                        if(self.sens == "out"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x
+                                self.next_left_y = self.pos_y + 60
+                                self.next_right_x = self.pos_x + 60
+                                self.next_right_y = self.pos_y + 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x - 60
+                                self.next_left_y = self.pos_y + 60
+                                self.next_right_x = self.pos_x
+                                self.next_right_y = self.pos_y + 60
+                    if(self.pos == "sud"):
+                        if(self.sens == "in"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x
+                                self.next_left_y = self.pos_y + 60
+                                self.next_right_x = self.pos_x + 60
+                                self.next_right_y = self.pos_y + 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x - 60
+                                self.next_left_y = self.pos_y + 60
+                                self.next_right_x = self.pos_x
+                                self.next_right_y = self.pos_y + 60
+                        if(self.sens == "out"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x
+                                self.next_left_y = self.pos_y - 60
+                                self.next_right_x = self.pos_x - 60
+                                self.next_right_y = self.pos_y - 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x + 60
+                                self.next_left_y = self.pos_y - 60
+                                self.next_right_x = self.pos_x
+                                self.next_right_y = self.pos_y - 60
+                    if(self.pos == "est"):
+                        if(self.sens == "in"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x - 60
+                                self.next_left_y = self.pos_y 
+                                self.next_right_x = self.pos_x - 60
+                                self.next_right_y = self.pos_y + 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x - 60
+                                self.next_left_y = self.pos_y - 60
+                                self.next_right_x = self.pos_x - 60
+                                self.next_right_y = self.pos_y
+                        if(self.sens == "out"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x + 60
+                                self.next_left_y = self.pos_y 
+                                self.next_right_x = self.pos_x + 60
+                                self.next_right_y = self.pos_y - 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x + 60
+                                self.next_left_y = self.pos_y + 60
+                                self.next_right_x = self.pos_x + 60
+                                self.next_right_y = self.pos_y
+                    if(self.pos == "ovest"):
+                        if(self.sens == "in"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x + 60
+                                self.next_left_y = self.pos_y 
+                                self.next_right_x = self.pos_x + 60
+                                self.next_right_y = self.pos_y - 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x + 60
+                                self.next_left_y = self.pos_y + 60
+                                self.next_right_x = self.pos_x + 60
+                                self.next_right_y = self.pos_y
+                        if(self.sens == "out"):
+                            if(self.cors == "left"):
+                                self.next_left_x = self.pos_x - 60
+                                self.next_left_y = self.pos_y 
+                                self.next_right_x = self.pos_x - 60
+                                self.next_right_y = self.pos_y + 60
+                            if(self.cors == "right"):
+                                self.next_left_x = self.pos_x - 60
+                                self.next_left_y = self.pos_y - 60
+                                self.next_right_x = self.pos_x - 60
+                                self.next_right_y = self.pos_y
+                    break
 
