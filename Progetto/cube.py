@@ -8,17 +8,9 @@ class cube():
         self.center_x = center_x
         self.center_y = center_y
         self.val = val
-        self.recognition(self.pos_x, self.pos_y)
         self.next_step()
 
     def recognition(self, pos_x, pos_y):
-        for j in points:
-            if(j[0] == pos_x and j[1] == pos_y):
-                self.name = j[2]
-                self.pos = j[3]
-                self.cors = j[4]
-                self.sens = j[5]
-                break;
         cube = None
         if(self.val == 0):
             cube = arcade.load_texture("../Concept Art/Blocks/bound.png")
@@ -44,7 +36,6 @@ class cube():
                 if(self.cors == "right"):
                     cube = arcade.load_texture("../Concept Art/Blocks/road4.png")
                     cube.draw_scaled(self.center_x, self.center_y)
-            
         if(self.val == 4):
             cube = arcade.load_texture("../Concept Art/Blocks/stop.png")
             cube.draw_scaled(self.center_x, self.center_y)
@@ -55,6 +46,10 @@ class cube():
     
     def next_step(self):
         for j in points:
+            self.name = j[2]
+            self.pos = j[3]
+            self.cors = j[4]
+            self.sens = j[5]
             if(j[0] == self.pos_x and j[1] == self.pos_y):
                 if(j[2] == "strada" or j[2] == "start"):
                     if(self.pos == "nord"):
