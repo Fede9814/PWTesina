@@ -46,11 +46,11 @@ class cube():
     
     def next_step(self):
         for j in points:
-            self.name = j[2]
-            self.pos = j[3]
-            self.cors = j[4]
-            self.sens = j[5]
             if(j[0] == self.pos_x and j[1] == self.pos_y):
+                self.name = j[2]
+                self.pos = j[3]
+                self.cors = j[4]
+                self.sens = j[5]
                 if(j[2] == "strada" or j[2] == "start"):
                     if(self.pos == "nord"):
                         if(self.sens == "in"):

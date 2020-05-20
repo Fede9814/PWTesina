@@ -2,6 +2,7 @@ import arcade
 import math
 import os
 import numpy
+import random
 
 class car(arcade.Sprite):
     def __init__(self, image, scale):
@@ -11,9 +12,9 @@ class car(arcade.Sprite):
         
     def setup(self, cube_list):
         self.cube_list = cube_list
+
+        self.center_x, self.center_y = self.spawn()
         
-        self.center_x = 840
-        self.center_y = 1020
         self.angle = 0 
     
     def update(self, delta_time=0.50):
@@ -30,14 +31,20 @@ class car(arcade.Sprite):
 
         for cube in self.cube_list:
             if(cube.pos_x <= self.center_x and cube.pos_x + 60 > self.center_x and cube.pos_y <= self.center_y and cube.pos_y + 60 > self.center_y):
-                temp_x = cube.next_right_x
-                temp_y = cube.next_right_y
+                if(cube.name == "strada" or cube.name == "start"):
+                    temp_x = cube.next_right_x
+                    temp_y = cube.next_right_y
+                else:
+                    temp_x = self.tempdestx
+                    temp_y = self.tempdesty
                 break
 
         for cube in self.cube_list:
             if(cube.pos_x == temp_x and cube.pos_y == temp_y):
                 dest_x = cube.center_x
                 dest_y = cube.center_y
+                self.tempdestx = temp_x
+                self.tempdesty = temp_y
                 break
         
         x_diff = dest_x - start_x
@@ -45,9 +52,6 @@ class car(arcade.Sprite):
         angle = math.atan2(y_diff, x_diff)
 
         if self.frame_count % 1 == 0:
-
-            self.center_x = start_x
-            self.center_y = start_y
             
             self.angle = math.degrees(angle)
 
@@ -56,6 +60,36 @@ class car(arcade.Sprite):
 
             self.center_x = self.center_x + self.change_x
             self.center_y = self.center_y + self.change_y
+
+    def spawn(self):
+        spawn = random.randint(1, 8)
+
+        if(spawn == 1):
+            start_spn_x = random.randint(850, 890)
+            start_spn_y = 1079
+        if(spawn == 2):
+            start_spn_x = random.randint(910, 950)
+            start_spn_y = 1079
+        if(spawn == 3):
+            start_spn_x = 1919
+            start_spn_y = random.randint(550, 590)
+        if(spawn == 4):
+            start_spn_x = 1919
+            start_spn_y = random.randint(610, 650)
+        if(spawn == 5):
+            start_spn_x = random.randint(970, 1010)
+            start_spn_y = 1
+        if(spawn == 6):
+            start_spn_x = random.randint(1030, 1070)
+            start_spn_y = 1
+        if(spawn == 7):
+            start_spn_x = 1
+            start_spn_y = random.randint(430, 470)
+        if(spawn == 8):
+            start_spn_x = 1
+            start_spn_y = random.randint(490, 530)
+        return start_spn_x, start_spn_y
+        
     
 
 

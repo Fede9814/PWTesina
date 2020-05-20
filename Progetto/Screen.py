@@ -26,6 +26,14 @@ class window(arcade.Window):
         auto = car("../Concept Art/Blocks/car.png", 1)
         auto.setup(self.cube_list)
         self.car_list.append(auto)
+
+        auto = car("../Concept Art/Blocks/car.png", 1)
+        auto.setup(self.cube_list)
+        self.car_list.append(auto)
+
+        auto = car("../Concept Art/Blocks/car.png", 1)
+        auto.setup(self.cube_list)
+        self.car_list.append(auto)
     
     def on_draw(self):       
         arcade.start_render()
