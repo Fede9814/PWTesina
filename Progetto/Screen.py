@@ -1,5 +1,6 @@
 import arcade
 import os
+from car import *
 
 from map import *
 from cube import *

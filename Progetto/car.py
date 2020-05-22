@@ -98,6 +98,4 @@ class car(arcade.Sprite):
             start_spn_y = random.randint(490, 530)
         return start_spn_x, start_spn_y
         
-    
-
-
+ 
