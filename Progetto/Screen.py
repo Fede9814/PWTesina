@@ -40,6 +40,8 @@ class window(arcade.Window):
         for cube in self.cube_list:
             cube.recognition(cube.pos_x, cube.pos_y)
         self.car_list.draw()
+        for car in self.car_list:
+            car.fov.draw()
 
     def on_update(self, delta_time=0.50):
         self.car_list.update()

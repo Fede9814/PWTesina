@@ -3,6 +3,7 @@ import math
 import os
 import numpy
 import random
+from fov import *
 
 class car(arcade.Sprite):
     def __init__(self, image, scale):
@@ -14,8 +15,11 @@ class car(arcade.Sprite):
         self.cube_list = cube_list
 
         self.center_x, self.center_y = self.spawn()
-        
         self.angle = 0 
+        self.fov = fov(self.center_x, self.center_y, self.angle)
+        self.fov.setup()
+        
+        
     
     def update(self, delta_time=0.50):
         self.frame_count += 1
@@ -54,12 +58,16 @@ class car(arcade.Sprite):
         if self.frame_count % 1 == 0:
             
             self.angle = math.degrees(angle)
+            self.fov.set_angle(self.angle)
 
             self.change_x = math.cos(angle) * self.initial_speed 
             self.change_y = math.sin(angle) * self.initial_speed
 
             self.center_x = self.center_x + self.change_x
             self.center_y = self.center_y + self.change_y
+
+            self.fov.move(self.change_x, self.change_y)
+            
 
     def spawn(self):
         spawn = random.randint(1, 8)
