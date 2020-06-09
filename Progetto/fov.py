@@ -27,4 +27,9 @@ class fov():
 
     def set_angle(self, value):
         self.shape_list.angle = value
-     
+
+
+    
+
+
+        
