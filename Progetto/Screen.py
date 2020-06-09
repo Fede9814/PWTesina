@@ -1,5 +1,6 @@
 import arcade
 import os
+import pyglet
 from car import *
 
 from map import *
@@ -12,6 +13,7 @@ class window(arcade.Window):
         super().__init__(width=1920, height=1080, title="Traffic Simulator", fullscreen=False)
         self.cube_list = []
         self.car_list = None
+        self.change = 1
 
     def setup(self):
         y = 1050;
@@ -26,15 +28,7 @@ class window(arcade.Window):
 
         auto = car("../Concept Art/Blocks/car.png", 1)
         auto.setup(self.cube_list)
-        self.car_list.append(auto)
-
-        auto = car("../Concept Art/Blocks/car.png", 1)
-        auto.setup(self.cube_list)
-        self.car_list.append(auto)
-
-        auto = car("../Concept Art/Blocks/car.png", 1)
-        auto.setup(self.cube_list)
-        self.car_list.append(auto)
+        self.car_list.append(auto)        
     
     def on_draw(self):       
         arcade.start_render()
@@ -53,4 +47,26 @@ class window(arcade.Window):
 
             width, height = self.get_size()
             self.set_viewport(0, width, 0, height)
+
+        if key == arcade.key.S:
+            if(self.change == 1):
+                for auto in self.car_list:
+                    auto.frame_up = False
+                self.change = 0  
+            else:
+                for auto in self.car_list:
+                    auto.frame_up = True 
+                self.change = 1   
+
+        if key == arcade.key.K:
     
+            auto = car("../Concept Art/Blocks/car.png", 1)
+            auto.setup(self.cube_list)
+            self.car_list.append(auto)
+
+    def set_update_rate(self, rate: float):
+
+        pyglet.clock.unschedule(self.update)
+        pyglet.clock.schedule_interval(self.update, rate)
+        pyglet.clock.unschedule(self.on_update)
+        pyglet.clock.schedule_interval(self.on_update, rate)
