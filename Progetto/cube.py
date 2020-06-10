@@ -22,25 +22,76 @@ class cube():
             cube = arcade.load_texture("../Concept Art/Blocks/end.png")
             cube.draw_scaled(self.center_x, self.center_y)
         elif(self.val == 3):
-            if(self.sens == "in"):
-                if(self.cors == "left"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road1.png")
-                    cube.draw_scaled(self.center_x, self.center_y)
-                if(self.cors == "right"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road2.png")
-                    cube.draw_scaled(self.center_x, self.center_y)
-            if(self.sens == "out"):
-                if(self.cors == "left"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road3.png")
-                    cube.draw_scaled(self.center_x, self.center_y)
-                if(self.cors == "right"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road4.png")
-                    cube.draw_scaled(self.center_x, self.center_y)
+            #NORD#
+            if(self.pos == "nord"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road1_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road2_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road3_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road4_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+            #SUD#
+            if(self.pos == "sud"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road3_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road4_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road1_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road2_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+            #OVEST#
+            if(self.pos == "ovest"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road2_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road1_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road4_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road3_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+            #EST#
+            if(self.pos == "est"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road1_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road2_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road3_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Concept Art/Blocks/road4_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+
         elif(self.val == 4):
             cube = arcade.load_texture("../Concept Art/Blocks/stop.png")
             cube.draw_scaled(self.center_x, self.center_y)
         elif(self.val == 5):
-            cube = arcade.load_texture("../Concept Art/Blocks/road.png")
+            cube = arcade.load_texture("../Concept Art/Blocks/road_new.png")
             cube.draw_scaled(self.center_x, self.center_y)
         self.cube = cube
     
