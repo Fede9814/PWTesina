@@ -14,6 +14,8 @@ class window(arcade.Window):
         self.cube_list = []
         self.car_list = None
         self.change = 1
+        self.current_status = 1
+        self.frame_count = 0
 
     def setup(self):
         y = 1050;
@@ -27,19 +29,34 @@ class window(arcade.Window):
         self.car_list = arcade.SpriteList()
 
         auto = car("../Concept Art/Blocks/car.png", 1)
-        auto.setup(self.cube_list)
+        auto.setup(self.cube_list, self.car_list)
         self.car_list.append(auto)        
     
     def on_draw(self):       
         arcade.start_render()
         for cube in self.cube_list:
             cube.recognition(cube.pos_x, cube.pos_y)
-        self.car_list.draw()
         for car in self.car_list:
-            car.fov.draw()
+            car.fov.sprite.draw()
+        self.car_list.draw()
 
     def on_update(self, delta_time=0.50):
+        self.frame_count += 1
+        if(self.frame_count % 60 == 0):
+            for cube in self.cube_list:
+                if(cube.val == 4):
+                    cube.change_status(self.current_status)
+            if(self.current_status < 4):
+                self.current_status += 1
+            else:
+                self.current_status = 1
+
+        for car in self.car_list:
+            car.set_car_list(self.car_list)
+        
         self.car_list.update()
+        for car in self.car_list:
+            car.fov.sprite.update()
         
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F:
@@ -61,7 +78,7 @@ class window(arcade.Window):
         if key == arcade.key.K:
     
             auto = car("../Concept Art/Blocks/car.png", 1)
-            auto.setup(self.cube_list)
+            auto.setup(self.cube_list, self.car_list)
             self.car_list.append(auto)
 
     def set_update_rate(self, rate: float):

@@ -38,8 +38,8 @@ points = [
     [900, 1020,   "start",      "nord",         "left" ,        "in" ],
     [960, 1020,   "exit",       "nord",         "left" ,        "out"],
     [1020, 1020,  "exit",       "nord",         "right",        "out"],
-    [840, 660,    "semaforo",   "nord",         "right",        "in" ],
-    [900, 660,    "semaforo",   "nord",         "left" ,        "in" ],
+    [840, 660,    "semaforo",   "nord",         "right",        "in",       1],
+    [900, 660,    "semaforo",   "nord",         "left" ,        "in",       1],
   
     [840,960,     "strada",     "nord",         "right",        "in" ],
     [900,960,     "strada",     "nord",         "left" ,        "in" ],
@@ -75,8 +75,8 @@ points = [
     [900, 0,      "exit",        "sud",         "left" ,        "out"],
     [960, 0,      "start",       "sud",         "left" ,        "in" ],
     [1020, 0,     "start",       "sud",         "right",        "in" ],
-    [960, 360,    "semaforo",    "sud",         "left" ,        "in" ],
-    [1020, 360,   "semaforo",    "sud",         "right",        "in" ],
+    [960, 360,    "semaforo",    "sud",         "left" ,        "in",       3],
+    [1020, 360,   "semaforo",    "sud",         "right",        "in",       3],
  
     [840, 60,     "strada",      "sud",         "right",        "out"],
     [900, 60,     "strada",      "sud",         "left" ,        "out"],
@@ -112,8 +112,8 @@ points = [
     [0, 480,      "start",     "ovest",         "left" ,        "in" ],
     [0, 540,      "exit",      "ovest",         "left" ,        "out"],
     [0, 600,      "exit",      "ovest",         "right",        "out"],
-    [780,420,     "semaforo",  "ovest",         "right",        "in" ],
-    [780,480,     "semaforo",  "ovest",         "left" ,        "in" ],
+    [780,420,     "semaforo",  "ovest",         "right",        "in",       4],
+    [780,480,     "semaforo",  "ovest",         "left" ,        "in",       4],
     
     [60, 420,     "strada",    "ovest",         "right",        "in" ],
     [120,420,     "strada",    "ovest",         "right",        "in" ],
@@ -175,8 +175,8 @@ points = [
     [1860, 480,   "exit",        "est",         "left" ,        "out"],
     [1860, 540,   "start",       "est",         "left" ,        "in" ],
     [1860, 600,   "start",       "est",         "right",        "in" ],
-    [1080, 540,   "semaforo",    "est",         "left" ,        "in" ],
-    [1080, 600,   "semaforo",    "est",         "right",        "in" ],
+    [1080, 540,   "semaforo",    "est",         "left" ,        "in",       2],
+    [1080, 600,   "semaforo",    "est",         "right",        "in",       2],
     
     [1800,420,     "strada",    "est",        "right",        "out"],
     [1740,420,     "strada",    "est",        "right",        "out"],

@@ -9,6 +9,7 @@ class cube():
         self.center_y = center_y
         self.val = val
         self.next_step()
+        self.stop_status = False
 
     def recognition(self, pos_x, pos_y):
         cube = None
@@ -196,3 +197,16 @@ class cube():
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y
                     break
+                if(j[2] == "semaforo"):
+                    self.stop_ord = j[6]
+                    break
+    
+    def change_status(self, current_status):
+        token = current_status
+        if(current_status == self.stop_ord):
+            self.stop_status = True
+        else:
+            self.stop_status = False
+
+
+            
