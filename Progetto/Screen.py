@@ -18,9 +18,9 @@ class window(arcade.Window):
         self.frame_count = 0
 
     def setup(self):
-        y = 1050;
+        y = 1050
         for j in map:
-            x = 30;
+            x = 30
             for i in j:
                 self.cube_list.append(cube(x-30, y-30, x, y, i))
                 x = x + 60

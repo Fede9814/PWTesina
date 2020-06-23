@@ -13,7 +13,16 @@ class car(arcade.Sprite):
         self.my_cube = None
         self.in_transit = False
         self.stop_cube = None
-        self.initial_speed = 300
+        #max speed = 300, after that it explodes.
+        #reasonable range: 150 < v < 300
+        # 150 ~ 30km/h, p = 5%
+        # 180 ~ 42km/h, p = 10%
+        # 210 ~ 54km/h, p = 35%
+        # 240 ~ 66km/h, p = 35%
+        # 270 ~ 78km/h, p = 10%
+        # 300 ~ 90km/h, p = 5%
+        self.initial_speed_range = [150, 180, 210, 240, 270, 300]
+        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.05, 0.10, 0.35, 0.35, 0.10, 0.05])
         self.base_value_x = 0
         self.base_value_y = 0
         self.collision = None
@@ -21,7 +30,6 @@ class car(arcade.Sprite):
     def setup(self, cube_list, car_list):
         self.cube_list = cube_list
         self.car_list = car_list
-
         self.center_x, self.center_y = self.spawn()
         self.angle = 0 
         self.fov = fov(self.center_x, self.center_y, self.angle)
@@ -31,7 +39,7 @@ class car(arcade.Sprite):
         self.car_list = car_list
     
     def update(self, delta_time=0.50): 
-
+        
         start_x = self.center_x
         start_y = self.center_y
 
