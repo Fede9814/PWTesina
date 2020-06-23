@@ -12,7 +12,7 @@ class fov():
 
     def setup(self):
         self.sprite = arcade.Sprite("../Concept Art/Blocks/end.png", 1)
-        self.sprite.alpha = 0
+        self.sprite.alpha = 255
         self.sprite.center_x = self.center_x
         self.sprite.center_y = self.center_y
 

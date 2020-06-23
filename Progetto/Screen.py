@@ -65,6 +65,22 @@ class window(arcade.Window):
             width, height = self.get_size()
             self.set_viewport(0, width, 0, height)
 
+        if key == arcade.key.H:
+            if(self.change == 1):
+                for auto in self.car_list:
+                    auto.fov.sprite.alpha = 0
+                self.change = 0  
+            else:
+                for auto in self.car_list:
+                    auto.fov.sprite.alpha = 255
+                self.change = 1   
+
+        if key == arcade.key.K:
+    
+            auto = car("../Concept Art/Blocks/car.png", 1)
+            auto.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto)
+
         if key == arcade.key.S:
             if(self.change == 1):
                 for auto in self.car_list:
@@ -74,12 +90,6 @@ class window(arcade.Window):
                 for auto in self.car_list:
                     auto.frame_up = True 
                 self.change = 1   
-
-        if key == arcade.key.K:
-    
-            auto = car("../Concept Art/Blocks/car.png", 1)
-            auto.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto)
 
     def set_update_rate(self, rate: float):
 
