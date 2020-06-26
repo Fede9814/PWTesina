@@ -25,13 +25,33 @@ class window(arcade.Window):
                 self.cube_list.append(cube(x-30, y-30, x, y, i))
                 x = x + 60
             y = y - 60  
+      
 
         self.car_list = arcade.SpriteList()
 
-        auto = car("../Concept Art/Blocks/car.png", 1)
-        auto.setup(self.cube_list, self.car_list)
-        self.car_list.append(auto)        
-    
+        auto1 = car("../car_1.png", 1)
+        auto2 = car("../car_2.png", 1)
+        auto3 = car("../car_3.png", 1)
+        auto4 = car("../car_4.png", 1)
+        auto5 = car("../car_5.png", 1)
+        auto6 = car("../car_6.png", 1)
+
+        auto1.setup(self.cube_list, self.car_list)
+        auto2.setup(self.cube_list, self.car_list)
+        auto3.setup(self.cube_list, self.car_list)
+        auto4.setup(self.cube_list, self.car_list)
+        auto5.setup(self.cube_list, self.car_list)
+        auto6.setup(self.cube_list, self.car_list)
+
+        self.car_list.append(auto1)
+        self.car_list.append(auto2)
+        self.car_list.append(auto3)
+        self.car_list.append(auto4)
+        self.car_list.append(auto5)
+        self.car_list.append(auto6)
+
+        auto = numpy.random.choice(self.car_list, p=[0.165, 0.165, 0.165, 0.165, 0.165, 0.175])
+
     def on_draw(self):       
         arcade.start_render()
         for cube in self.cube_list:
