@@ -94,6 +94,18 @@ class window(arcade.Window):
                 for auto in self.car_list:
                     auto.frame_up = True 
                 self.change = 1   
+        
+        if key == arcade.key.C:
+            if(self.change == 1):
+                for auto in self.car_list:
+                    if(auto.fov.sprite.alpha != 0):
+                        auto.fov.sprite.alpha = 0
+                self.change = 0  
+            else:
+                for auto in self.car_list:
+                    if(auto.fov.sprite.alpha == 0):
+                        auto.fov.sprite.alpha = 255 
+                self.change = 1   
 
         if key == arcade.key.K:
     
