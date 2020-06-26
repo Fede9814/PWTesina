@@ -32,7 +32,7 @@ class car(arcade.Sprite):
         self.car_list = car_list
         self.center_x, self.center_y = self.spawn()
         self.angle = 0 
-        self.fov = fov(self.center_x, self.center_y, self.angle)
+        self.fov = fov(self.center_x, self.center_y, self.angle, self)
         self.fov.setup()
 
     def set_car_list (self, car_list):
@@ -68,7 +68,7 @@ class car(arcade.Sprite):
                 self.center_x = self.center_x + self.change_x
                 self.center_y = self.center_y + self.change_y
 
-                self.fov.move(self.change_x, self.change_y)
+                self.fov.move()
             
 
     def spawn(self):

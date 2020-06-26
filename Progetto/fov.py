@@ -5,23 +5,19 @@ import numpy
 import random
 
 class fov(arcade.PhysicsEngineSimple):
-    def __init__(self, center_x, center_y, angle):
+    def __init__(self, center_x, center_y, angle, car):
 
         self.center_x = center_x
         self.center_y = center_y
         self.angle = angle
-        
-        #fov parameters
-        #questo è ok
-        age_range =             [20, 40, 60, 80]
-        #questo è ok
-        Speed_range =           [1.5, 1.8, 2.1, 2.4, 2.7, 3.0]
-        #questo è ok
-        μ_global_range =        [0.1, 0.8]
-        #questo è ok
-        reaction_time_range =   [1.5, 3.0, 4.5]
-        #questo è fisso
-        fixed_value =           250
+        self.car = car
+
+        age_range = [20, 40, 60, 80]
+        Speed_range = [1.5, 1.8, 2.1, 2.4, 2.7, 3.0]
+        μ_global_range = [0.1, 0.8]
+        reaction_time_range = [1.5, 3.0, 4.5]
+
+        fixed_value = 250
 
         self.age_range = age_range
         self.Speed_range = Speed_range 
@@ -72,19 +68,39 @@ class fov(arcade.PhysicsEngineSimple):
         # print("B_dist",self.B_dist)
 
         self.FOV_length = self.R_dist + self.B_dist
+
     
     def setup(self):
         self.sprite = arcade.Sprite("../Concept Art/hitbox.png", self.FOV_length)
         #setta alpha a 0 per nascondere i fov delle macchine
         self.sprite.alpha = 255
-        self.sprite.center_x = self.center_x
-        self.sprite.center_y = self.center_y
+        pcx, pcy = self.center_calc(self.car)
+        self.sprite.center_x = pcx
+        self.sprite.center_y = pcy
 
-    def move(self, change_x: float, change_y: float):
-        self.sprite.center_x += change_x
-        self.sprite.center_y += change_y
+    def center_calc(self, car):
+        punto_a = car.points[1]
+        punto_b = car.points[3]
+
+        punto_a_x = punto_a[0]
+        punto_a_y = punto_a[1]
+        punto_b_x = punto_b[0]
+        punto_b_y = punto_b[1]
+
+        punto_c_x = (punto_a_x + punto_b_x)/2
+        punto_c_y = (punto_a_y + punto_b_y)/2
+
+        return punto_c_x, punto_c_y
+
+
+    def move(self):
+        pcx, pcy = self.center_calc(self.car)
+        self.sprite.center_x = pcx
+        self.sprite.center_y = pcy
+
 
     def set_angle(self, value):
         self.sprite.angle = value
 
+    
         

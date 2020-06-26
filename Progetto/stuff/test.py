@@ -40,11 +40,22 @@ class MyGame(arcade.Window):
         self.car = car
         self.car_list.append(car)
 
+        punto_a = self.car.points[1]
+        punto_b = self.car.points[3]
+
+        punto_a_x = punto_a[0]
+        punto_a_y = punto_a[1]
+        punto_b_x = punto_b[0]
+        punto_b_y = punto_b[1]
+
+        punto_c_x = (punto_a_x + punto_b_x)/2
+        punto_c_y = (punto_a_y + punto_b_y)/2
+
         car = arcade.Sprite("../Concept Art/Blocks/start.png", 1)
-        car.center_x = 400
-        car.center_y = 50
         car.angle = 0 
         self.x1 = car
+        self.x1.center_x = punto_c_x
+        self.x1.center_y = punto_c_y
         self.x.append(car)
 
         end = arcade.Sprite("../Concept Art/Blocks/end.png", 1)
@@ -52,7 +63,6 @@ class MyGame(arcade.Window):
         end.center_y = 400
         self.end = end
         self.end_list.append(end)
-
 
     def on_draw(self):
         """Render the screen. """
@@ -62,8 +72,22 @@ class MyGame(arcade.Window):
         self.x.draw()
         self.car_list.draw()
         
+        punto_a = self.car.points[1]
+        punto_b = self.car.points[3]
+
+        punto_a_x = punto_a[0]
+        punto_a_y = punto_a[1]
+        punto_b_x = punto_b[0]
+        punto_b_y = punto_b[1]
+
+        punto_c_x = (punto_a_x + punto_b_x)/2
+        punto_c_y = (punto_a_y + punto_b_y)/2
+
+        arcade.draw_point(punto_c_x, punto_c_y, arcade.color.BLUE, 5)      
+        
     
     def on_update(self, delta_time=0.50):
+        
         self.initial_speed = 1
             
         start_x = self.car.center_x
@@ -77,7 +101,7 @@ class MyGame(arcade.Window):
         angle = math.atan2(y_diff, x_diff)
         
         for cars in self.end_list:
-            if arcade.check_for_collision(self.car, cars):
+            if arcade.check_for_collision(self.x1, cars):
                 self.move = False
                 break
             else:
@@ -90,14 +114,30 @@ class MyGame(arcade.Window):
             self.car.change_x = math.cos(angle) * self.initial_speed
             self.car.change_y = math.sin(angle) * self.initial_speed
 
-            self.x1.change_x = self.car.change_x  
-            self.x1.change_y = self.car.change_y 
+            punto_a = self.car.points[1]
+            punto_b = self.car.points[3]
+
+            punto_a_x = punto_a[0]
+            punto_a_y = punto_a[1]
+            punto_b_x = punto_b[0]
+            punto_b_y = punto_b[1]
+
+            punto_c_x = (punto_a_x + punto_b_x)/2
+            punto_c_y = (punto_a_y + punto_b_y)/2
+
+            self.x1.center_x =  punto_c_x
+            self.x1.center_y = punto_c_y
 
             self.x1.angle = self.car.angle
 
 
-        self.car_list.update()
+            self.car_list.update()
         self.x.update()
+
+    def on_mouse_motion(self, x, y, delta_x, delta_y):
+        """Called whenever the mouse moves. """
+        self.end.center_x = x
+        self.end.center_y = y
 
 
 
