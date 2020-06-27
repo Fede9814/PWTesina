@@ -1,11 +1,18 @@
 import arcade
 import os
 import pyglet
+import time
+import timeit
 from car import *
-
 from map import *
 from cube import *
-from car import *
+from FPS_Counter import *
+
+USE_SPATIAL_HASHING = True
+if USE_SPATIAL_HASHING:
+    RESULTS_FILE = "stress_test_collision_arcade_spatial.csv"
+else:
+    RESULTS_FILE = "stress_test_collision_arcade.csv"
 
 class window(arcade.Window):
 
@@ -17,7 +24,62 @@ class window(arcade.Window):
         self.current_status = 1
         self.frame_count = 0
 
+        self.background_music_list = []
+        self.car_music_list = []
+        self.tir_music_list = []
+        self.bike_music_list = []
+
+        self.current_background_song = 0
+        self.current_car_song = 0
+        self.current_tir_song = 0
+        self.current_bike_song = 0
+
+        self.music = None
+        self.BACKGROUND_MUSIC_VOLUME = 0.3
+        self.CAR_MUSIC_VOLUME = 0.1
+        self.TIR_MUSIC_VOLUME = 0.1
+        self.BIKE_MUSIC_VOLUME = 0.1
+
+        self.processing_time = 0
+        self.draw_time = 0
+        self.program_start_time = timeit.default_timer()
+        self.fps_list = []
+        self.processing_time_list = []
+        self.drawing_time_list = []
+        self.last_fps_reading = 0
+        self.fps = FPSCounter()
+
+        self.results_file = open(RESULTS_FILE, "w")
+
+    def play_background_song(self):
+        self.background_music = arcade.Sound(self.background_music_list[self.current_background_song], streaming=True)
+        self.background_music.play(self.BACKGROUND_MUSIC_VOLUME)
+
+    def play_car_song(self):
+        self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)
+        self.car_music.play(self.CAR_MUSIC_VOLUME)
+
+    def play_tir_song(self):
+        self.tir_music = arcade.Sound(self.tir_music_list[self.current_tir_song], streaming=True)
+        self.tir_music.play(self.TIR_MUSIC_VOLUME)
+
+    def play_bike_song(self):
+        self.bike_music = arcade.Sound(self.bike_music_list[self.current_bike_song], streaming=True)
+        self.bike_music.play(self.BIKE_MUSIC_VOLUME)
+    
+
     def setup(self):
+        self.background_music_list = ["../Sound/traffic.wav"]
+        self.car_music_list = ["../Sound/1_crash.wav"]
+        self.tir_music_list = ["../Sound/2_splat.wav"]
+        self.bike_music_list = ["../Sound/3_burn.wav"]
+        self.current_background_song = 0
+        self.play_background_song()
+        self.total_execution_time = 0.0
+        self.processing_time = 0
+        self.processing_time_list = []
+        self.program_start_time = timeit.default_timer()
+
         y = 1050
         for j in map:
             x = 30
@@ -29,12 +91,18 @@ class window(arcade.Window):
 
         self.car_list = arcade.SpriteList()
 
-        auto1 = car("../car_1.png", 1)
-        auto2 = car("../car_2.png", 1)
-        auto3 = car("../car_3.png", 1)
-        auto4 = car("../car_4.png", 1)
-        auto5 = car("../car_5.png", 1)
-        auto6 = car("../car_6.png", 1)
+        auto1 = car("../Sprites/Car/car_1.png", 1)
+        auto2 = car("../Sprites/Car/car_2.png", 1)
+        auto3 = car("../Sprites/Car/car_3.png", 1)
+        auto4 = car("../Sprites/Car/car_4.png", 1)
+        auto5 = car("../Sprites/Car/car_5.png", 1)
+        auto6 = car("../Sprites/Car/TIR_1.png", 1)
+        auto7 = car("../Sprites/Car/TIR_2.png", 1)
+        auto8 = car("../Sprites/Car/TIR_3.png", 1)
+        auto9 = car("../Sprites/Car/bike_1.png", 1)
+        auto10 = car("../Sprites/Car/bike_2.png", 1)
+        auto11 = car("../Sprites/Car/bike_3.png", 1)
+
 
         auto1.setup(self.cube_list, self.car_list)
         auto2.setup(self.cube_list, self.car_list)
@@ -42,6 +110,11 @@ class window(arcade.Window):
         auto4.setup(self.cube_list, self.car_list)
         auto5.setup(self.cube_list, self.car_list)
         auto6.setup(self.cube_list, self.car_list)
+        auto7.setup(self.cube_list, self.car_list)
+        auto8.setup(self.cube_list, self.car_list)
+        auto9.setup(self.cube_list, self.car_list)
+        auto10.setup(self.cube_list, self.car_list)
+        auto11.setup(self.cube_list, self.car_list)
 
         self.car_list.append(auto1)
         self.car_list.append(auto2)
@@ -49,8 +122,13 @@ class window(arcade.Window):
         self.car_list.append(auto4)
         self.car_list.append(auto5)
         self.car_list.append(auto6)
+        self.car_list.append(auto7)
+        self.car_list.append(auto8)
+        self.car_list.append(auto9)
+        self.car_list.append(auto10)
+        self.car_list.append(auto11)
 
-        auto = numpy.random.choice(self.car_list, p=[0.165, 0.165, 0.165, 0.165, 0.165, 0.175])
+        auto = numpy.random.choice(self.car_list, p=[0.12, 0.12, 0.12, 0.12, 0.12, 0.07, 0.07, 0.06, 0.07, 0.07, 0.06])
 
     def on_draw(self):       
         arcade.start_render()
@@ -60,7 +138,61 @@ class window(arcade.Window):
             car.fov.sprite.draw()
         self.car_list.draw()
 
+        hours = int(self.total_execution_time) // 3600
+        minutes = int(self.total_execution_time) // 60
+        seconds = int(self.total_execution_time) % 60
+
+        elapsed_time_output = f"Elapsed Time: {hours:02d}:{minutes:02d}:{seconds:02d}"
+        arcade.draw_text(elapsed_time_output, 300, 960, arcade.color.BLACK, 25)
+
+        draw_start_time = timeit.default_timer()
+
+        output_processing_time = f"Processing time: {self.processing_time:.3f}"
+        arcade.draw_text(output_processing_time, 300, 930, arcade.color.BLACK, 25)
+
+        output_draw_time = f"Drawing time: {self.draw_time:.3f}"
+        arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
+
+        fps = self.fps.get_fps()
+        output_draw_text = f"FPS: {fps:3.0f}"
+        arcade.draw_text(output_draw_text, 300, 870, arcade.color.BLACK, 25)
+
+        self.draw_time = timeit.default_timer() - draw_start_time
+        self.fps.tick()
+
+
+
+    def advance_song(self):
+        self.current_background_song += 1
+        if self.current_background_song >= len(self.background_music_list):
+            self.current_background_song = 0
+
     def on_update(self, delta_time=0.50):
+        background_music_looper = self.background_music.get_stream_position()
+        if background_music_looper == 0.0:
+            self.advance_song()
+            self.play_background_song()
+
+        self.total_execution_time += delta_time
+
+
+        start_time = timeit.default_timer()
+        self.processing_time = timeit.default_timer() - start_time
+        total_program_time = int(timeit.default_timer() - self.program_start_time)
+        if total_program_time > self.last_fps_reading:
+            self.last_fps_reading = total_program_time
+            if total_program_time > 5:
+                if total_program_time % 2 == 1:
+                    output = f"{total_program_time}, {self.fps.get_fps():.1f}, " \
+                            f"{self.processing_time:.4f}, {self.draw_time:.4f}\n"
+
+                    print(output, end="")
+                    self.results_file.write(output)
+
+                self.fps_list.append(round(self.fps.get_fps(), 1))
+                self.processing_time_list.append(self.processing_time)
+                self.drawing_time_list.append(self.draw_time)
+
         self.frame_count += 1
         if(self.frame_count % 60 == 0):
             for cube in self.cube_list:
@@ -107,11 +239,63 @@ class window(arcade.Window):
                         auto.fov.sprite.alpha = 255 
                 self.change = 1   
 
-        if key == arcade.key.K:
-    
-            auto = car("../Concept Art/Blocks/car.png", 1)
-            auto.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto)
+        if key == arcade.key.KEY_1:
+            auto1 = car("../Sprites/Car/car_1.png", 1)
+            auto1.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto1)
+
+        if key == arcade.key.KEY_2:
+            auto2 = car("../Sprites/Car/car_2.png", 1)
+            auto2.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto2)
+
+        if key == arcade.key.KEY_3:
+            auto3 = car("../Sprites/Car/car_3.png", 1)
+            auto3.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto3)
+        
+        if key == arcade.key.KEY_4:
+            auto4 = car("../Sprites/Car/car_4.png", 1)
+            auto4.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto4)
+
+        if key == arcade.key.KEY_5:
+            auto5 = car("../Sprites/Car/car_5.png", 1)
+            auto5.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto5)
+        
+        if key == arcade.key.KEY_6:
+            auto6 = car("../Sprites/Car/TIR_1.png", 1)
+            auto6.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto6)
+
+        if key == arcade.key.KEY_7:
+            auto7 = car("../Sprites/Car/TIR_2.png", 1)
+            auto7.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto7)
+
+        if key == arcade.key.KEY_8:
+            auto8 = car("../Sprites/Car/TIR_3.png", 1)
+            auto8.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto8)
+
+
+        if key == arcade.key.KEY_9:
+            auto9 = car("../Sprites/Car/bike_1.png", 1)
+            auto9.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto9)
+
+
+        if key == arcade.key.KEY_0:
+            auto10 = car("../Sprites/Car/bike_2.png", 1)
+            auto10.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto10)
+
+
+        if key == arcade.key.P:
+            auto11 = car("../Sprites/Car/bike_3.png", 1)
+            auto11.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto11)
 
     def set_update_rate(self, rate: float):
 

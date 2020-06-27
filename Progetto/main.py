@@ -1,6 +1,6 @@
 import arcade
 from map import *
-from screen import *
+from Screen import *
 from car import *
 from Collision import *
 

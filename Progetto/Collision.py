@@ -184,3 +184,17 @@ class Pilot():
             dodge_angle_value = 0
         
         return dodge_angle_value"""
+
+
+
+"""        self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)
+        self.car_music.play(self.MUSIC_VOLUME)
+
+        self.tir_music = arcade.Sound(self.tir_music_list[self.current_tir_song], streaming=True)
+        self.tir_music.play(self.MUSIC_VOLUME)
+
+        self.bike_music = arcade.Sound(self.bike_music_list[self.current_bike_song], streaming=True)
+        self.bike_music.play(self.MUSIC_VOLUME)
+        self.current_car_song = 0
+        self.current_tir_song = 0
+        self.current_bike_song = 0"""

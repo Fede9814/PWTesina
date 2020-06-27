@@ -4,6 +4,9 @@ import os
 import numpy
 import random
 
+#LARGHEZZA < 55
+#LUNGHEZZA < L CAR
+
 class fov(arcade.PhysicsEngineSimple):
     def __init__(self, center_x, center_y, angle, car):
 
