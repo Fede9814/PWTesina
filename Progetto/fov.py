@@ -71,12 +71,19 @@ class fov(arcade.PhysicsEngineSimple):
 
     
     def setup(self):
-        self.sprite = arcade.Sprite("../Concept Art/hitbox.png", self.FOV_length)
+        self.sprite = arcade.Sprite("../Concept Art/hitbox.png", 2)
         #setta alpha a 0 per nascondere i fov delle macchine
-        self.sprite.alpha = 255
+        self.sprite.alpha = 0
         pcx, pcy = self.center_calc(self.car)
         self.sprite.center_x = pcx
         self.sprite.center_y = pcy
+
+
+        self.stop_sprite = arcade.Sprite("../Concept Art/hitbox.png", 1)
+        self.stop_sprite.alpha = 0
+        pcx, pcy = self.center_calc(self.car)
+        self.stop_sprite.center_x = pcx
+        self.stop_sprite.center_y = pcy
 
     def center_calc(self, car):
         punto_a = car.points[1]
@@ -98,9 +105,32 @@ class fov(arcade.PhysicsEngineSimple):
         self.sprite.center_x = pcx
         self.sprite.center_y = pcy
 
+        self.stop_sprite.center_x = pcx
+        self.stop_sprite.center_y = pcy
+
+    def search_my_cube(self, cube):
+        if(cube.pos_x <= self.sprite.center_x and cube.pos_x + 60 > self.sprite.center_x and cube.pos_y <= self.sprite.center_y and cube.pos_y + 60 > self.sprite.center_y):
+            self.my_cube = cube.val
+            if(cube.val == 4):
+                print(self.my_cube)
 
     def set_angle(self, value):
         self.sprite.angle = value
+        self.stop_sprite.angle = value
+
+
+    def check_distance(self, car_list):
+        in_range = None
+        for car in car_list:
+            if(car.telaio != self.car.telaio):
+                if arcade.check_for_collision(self.sprite, car):
+                    in_range = False
+                    break
+                else:
+                    in_range = True
+        if(in_range == None):
+            in_range = True
+        return in_range
 
     
         
