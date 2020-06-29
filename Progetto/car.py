@@ -34,16 +34,17 @@ class car(arcade.Sprite):
         self.stop_cube = None
         #max speed = 330, after that it explodes.
         #reasonable range: 150 < v < 300
-        # 210 ~ 54km/h, p = 35%
-        # 240 ~ 66km/h, p = 35%
-        # 270 ~ 78km/h, p = 10%
-        # 300 ~ 90km/h, p = 5%
-        self.initial_speed_range = [210, 240, 270, 300, 330]
-        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.20, 0.20, 0.20, 0.20, 0.20])
+        self.initial_speed_range = [180, 210, 240, 270, 300, 330]
+        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.16, 0.16, 0.17, 0.17, 0.17, 0.17])
         self.speed = self.initial_speed
         self.base_value_x = 0
         self.base_value_y = 0
-        self.collision = True
+        self.collision = False
+        self.skip_collision = False
+        self.ignore = False
+        self.frame_count = 0
+        self.despawn_count = 100
+        
         
         
     def setup(self, cube_list, car_list):
@@ -58,15 +59,38 @@ class car(arcade.Sprite):
         self.car_list = car_list
 
     def reduce_speed (self):
-        if( self.speed > 0):
+        if( self.speed >= 15 and self.ignore == False):
             self.speed += -15
 
         if( self.speed > 210):
             self.probability_change += 2
     
     def increase_speed (self):
-        if( self.speed < self.initial_speed or (self.stop_cube != None and self.in_transit == False)):
+        if( self.speed < self.initial_speed or (self.stop_cube != None and self.in_transit == False) and self.speed < 400):
             self.speed += 15
+
+    def brack_in_time (self, car):
+        if(car.speed < self.speed):
+            self.speed = self.speed/2
+            self.reduce_speed()
+        else:
+            self.reduce_speed()
+
+    def check_collision(self, car_list):
+            in_range = None
+            for car in car_list:
+                if(car.telaio != self.telaio):
+                    if arcade.check_for_collision(self, car):
+                        in_range = True
+                        if(self.frame_count > self.despawn_count):
+                            self.kill()
+                            car.kill()
+                        break
+                    else:
+                        in_range = False
+            if(in_range == None):
+                in_range = False
+            return in_range
     
     def update(self, delta_time=0.50): 
         
@@ -85,9 +109,23 @@ class car(arcade.Sprite):
         else:
             self.increase_speed()
 
+        self.check_brack, front_car = self.fov.check_bracking(self.car_list)
+        if(self.check_brack == True and self.ignore == False):
+            self.brack_in_time(front_car)
+
         #self.check_speed = True
+
+        self.skip_collision = self.fov.check_car_collision(self.car_list)
+        if(self.skip_collision == True):
+            self.probability_change = 0
+            self.temp_destx = self.last_change_x
+            self.temp_desty = self.last_change_y
+
+        self.collision = self.check_collision(self.car_list)
+
+
             
-        if self.collision == True:
+        if self.collision == False:
             if self.frame_up == True:
                 self.angle = math.degrees(angle)
                 self.fov.set_angle(self.angle)
@@ -99,10 +137,12 @@ class car(arcade.Sprite):
                 self.center_y = self.center_y + self.change_y
 
                 self.fov.move()
+        else:
+            self.frame_count += 1
             
 
     def spawn(self):
-        spawn = random.randint(1, 8)
+        spawn = random.randint(1,8)
 
         if(spawn == 1):
             start_spn_x = random.randint(850, 890)
@@ -152,18 +192,24 @@ class car(arcade.Sprite):
                                 if(cube.cors == "left"):
                                     temp_x = cube.next_right_x
                                     temp_y = cube.next_right_y
+                                    #self.probability_change += 1
                                 else:
                                     temp_x = cube.next_left_x
                                     temp_y = cube.next_left_y
-                                self.probability_change = 1
+                                    self.probability_change = 0
                             else:
                                 if(cube.cors == "right"):
                                     temp_x = cube.next_right_x
                                     temp_y = cube.next_right_y
+
+                                    self.last_change_x = cube.next_left_x
+                                    self.last_change_y = cube.next_left_y
                                 else:
                                     temp_x = cube.next_left_x
                                     temp_y = cube.next_left_y
-                                self.probability_change += 1
+
+                                    self.last_change_x = cube.next_right_x
+                                    self.last_change_y = cube.next_right_y
                         elif(cube.name == "semaforo"):
                             temp_x, temp_y = self.rotation(cube)
                             self.stop_cube = cube
