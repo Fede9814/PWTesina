@@ -40,10 +40,12 @@ for i in range (10000):
 
     B_dist = ((math.pow(Speed, 2.0) / (fixed_value * 0.8)))
 
+
+"""
     if B_dist <= 0.01125:
         print ("1.DrySlow", B_dist)
     elif B_dist > 0.01126 and B_dist <= 0.045:
-        print ("2.DryFast", B_dist)
+        print ("2.DryFast", B_dist)"""
 
 """    if R_dist <= 3.45:
         print ("1", R_dist)
