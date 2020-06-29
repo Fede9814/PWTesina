@@ -73,33 +73,36 @@ class fov(arcade.PhysicsEngineSimple):
     
     def setup(self):
 
-        self.fov_list = arcade.SpriteList()
+        fov_list = []
 
-        hitbox1 = hitbox("../Sprites/Hitbox/Hitbox_L60_W55.png", 1)
-        hitbox2 = hitbox("../Sprites/Hitbox/Hitbox_L80_W55.png", 1)
-        hitbox3 = hitbox("../Sprites/Hitbox/Hitbox_L100_W55.png", 1)
-        hitbox4 = hitbox("../Sprites/Hitbox/Hitbox_L120_W55.png", 1)
-        hitbox5 = hitbox("../Sprites/Hitbox/Hitbox_140_W55.png", 1)
+        hitbox1 = "../Sprites/Hitbox/Hitbox_L60_W30.png"
+        hitbox2 = "../Sprites/Hitbox/Hitbox_L80_W30.png"
+        hitbox3 = "../Sprites/Hitbox/Hitbox_L100_W30.png"
+        hitbox4 = "../Sprites/Hitbox/Hitbox_L120_W30.png"
+        hitbox5 = "../Sprites/Hitbox/Hitbox_140_W30.png"
 
-        hitbox1.setup(self.fov_list)
-        hitbox2.setup(self.fov_list)
-        hitbox3.setup(self.fov_list)
-        hitbox4.setup(self.fov_list)
-        hitbox5.setup(self.fov_list)
+        fov_list.append(hitbox1)
+        fov_list.append(hitbox2)
+        fov_list.append(hitbox3)
+        fov_list.append(hitbox4)
+        fov_list.append(hitbox5)
 
-        self.fov_list.append(hitbox1)
-        self.fov_list.append(hitbox2)
-        self.fov_list.append(hitbox3)
-        self.fov_list.append(hitbox4)
-        self.fov_list.append(hitbox5)
-
-        self.hitbox_fov = numpy.random.choice(self.fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
+        self.hitbox_fov = numpy.random.choice(fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
 
         #setta alpha a 0 per nascondere i fov delle macchine
         #self.hitbox.alpha = 255
+        self.sprite = arcade.Sprite(self.hitbox_fov, 1)
+        #setta alpha a 0 per nascondere i fov delle macchine
+        self.sprite.alpha = 0
         pcx, pcy = self.center_calc(self.car)
-        self.hitbox_fov.center_x = pcx
-        self.hitbox_fov.center_y = pcy
+        self.sprite.center_x = pcx
+        self.sprite.center_y = pcy
+
+        self.stop_sprite = arcade.Sprite("../Concept Art/hitbox.png", 1)
+        self.stop_sprite.alpha = 0
+        pcx, pcy = self.center_calc(self.car)
+        self.stop_sprite.center_x = pcx
+        self.stop_sprite.center_y = pcy
 
     def center_calc(self, car):
         punto_a = car.points[1]
@@ -118,12 +121,34 @@ class fov(arcade.PhysicsEngineSimple):
 
     def move(self):
         pcx, pcy = self.center_calc(self.car)
-        self.hitbox.center_x = pcx
-        self.hitbox.center_y = pcy
+        self.sprite.center_x = pcx
+        self.sprite.center_y = pcy
 
+        self.stop_sprite.center_x = pcx
+        self.stop_sprite.center_y = pcy
+
+    def search_my_cube(self, cube):
+        if(cube.pos_x <= self.sprite.center_x and cube.pos_x + 60 > self.sprite.center_x and cube.pos_y <= self.sprite.center_y and cube.pos_y + 60 > self.sprite.center_y):
+            self.my_cube = cube.val
+            if(cube.val == 4):
+                print(self.my_cube)
 
     def set_angle(self, value):
-        self.hitbox.angle = value
+        self.sprite.angle = value
+        self.stop_sprite.angle = value
+
+    def check_distance(self, car_list):
+        in_range = None
+        for car in car_list:
+            if(car.telaio != self.car.telaio):
+                if arcade.check_for_collision(self.sprite, car):
+                    in_range = False
+                    break
+                else:
+                    in_range = True
+        if(in_range == None):
+            in_range = True
+        return in_range
 
     
         

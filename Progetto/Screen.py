@@ -20,9 +20,13 @@ class window(arcade.Window):
         super().__init__(width=1920, height=1080, title="Traffic Simulator", fullscreen=False)
         self.cube_list = []
         self.car_list = None
-        self.change = 1
+        self.change = 0
         self.current_status = 1
         self.frame_count = 0
+        self.yellow_start = False
+        self.yellow_count = 0
+        self.yellow_time = 20
+        self.red_time = 120
 
         self.background_music_list = []
         self.car_music_list = []
@@ -136,6 +140,7 @@ class window(arcade.Window):
             cube.recognition(cube.pos_x, cube.pos_y)
         for car in self.car_list:
             car.fov.sprite.draw()
+            car.fov.stop_sprite.draw()
         self.car_list.draw()
 
         hours = int(self.total_execution_time) // 3600
@@ -160,14 +165,13 @@ class window(arcade.Window):
         self.draw_time = timeit.default_timer() - draw_start_time
         self.fps.tick()
 
-
-
     def advance_song(self):
         self.current_background_song += 1
         if self.current_background_song >= len(self.background_music_list):
             self.current_background_song = 0
 
     def on_update(self, delta_time=0.50):
+
         background_music_looper = self.background_music.get_stream_position()
         if background_music_looper == 0.0:
             self.advance_song()
@@ -193,15 +197,27 @@ class window(arcade.Window):
                 self.processing_time_list.append(self.processing_time)
                 self.drawing_time_list.append(self.draw_time)
 
-        self.frame_count += 1
-        if(self.frame_count % 60 == 0):
-            for cube in self.cube_list:
-                if(cube.val == 4):
-                    cube.change_status(self.current_status)
-            if(self.current_status < 4):
-                self.current_status += 1
+        if(self.frame_count % self.red_time == 0 and self.frame_count != 0):
+            self.yellow_start = True
+            if(self.yellow_count == 0):
+                for cube in self.cube_list:
+                    if(cube.val == 4):
+                        if(cube.stop_status == True):
+                            cube.stop_status = False
+            if(self.yellow_count % self.yellow_time == 0 and self.yellow_count != 0):
+                self.yellow_start = False
+                self.yellow_count = 0
+                if(self.current_status < 4):
+                    self.current_status += 1
+                else:
+                    self.current_status = 1
+                for cube in self.cube_list:
+                    if(cube.val == 4):
+                        cube.change_status(self.current_status)
             else:
-                self.current_status = 1
+                self.yellow_count += 1
+        if(self.yellow_start != True):
+            self.frame_count += 1
 
         for car in self.car_list:
             car.set_car_list(self.car_list)
@@ -209,34 +225,27 @@ class window(arcade.Window):
         self.car_list.update()
         for car in self.car_list:
             car.fov.sprite.update()
+            car.fov.stop_sprite.update()
         
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F:
             self.set_fullscreen(not self.fullscreen)
 
             width, height = self.get_size()
-            self.set_viewport(0, width, 0, height)
-
-        if key == arcade.key.S:
-            if(self.change == 1):
-                for auto in self.car_list:
-                    auto.frame_up = False
-                self.change = 0  
-            else:
-                for auto in self.car_list:
-                    auto.frame_up = True 
-                self.change = 1   
+            self.set_viewport(0, width, 0, height) 
         
         if key == arcade.key.C:
             if(self.change == 1):
                 for auto in self.car_list:
                     if(auto.fov.sprite.alpha != 0):
                         auto.fov.sprite.alpha = 0
+                        auto.fov.stop_sprite.alpha = 0
                 self.change = 0  
             else:
                 for auto in self.car_list:
                     if(auto.fov.sprite.alpha == 0):
                         auto.fov.sprite.alpha = 255 
+                        auto.fov.stop_sprite.alpha = 255
                 self.change = 1   
 
         if key == arcade.key.KEY_1:

@@ -8,24 +8,24 @@ from fov import *
 class car(arcade.Sprite):
     def __init__(self, image, scale):
         super().__init__(image, scale)
+        self.telaio = numpy.random.randint(0, 1000000, 1)
         self.frame_up = True
         self.probability_change = 1
         self.my_cube = None
         self.in_transit = False
         self.stop_cube = None
-        #max speed = 300, after that it explodes.
+        #max speed = 330, after that it explodes.
         #reasonable range: 150 < v < 300
-        # 150 ~ 30km/h, p = 5%
-        # 180 ~ 42km/h, p = 10%
         # 210 ~ 54km/h, p = 35%
         # 240 ~ 66km/h, p = 35%
         # 270 ~ 78km/h, p = 10%
         # 300 ~ 90km/h, p = 5%
-        self.initial_speed_range = [150, 180, 210, 240, 270, 300]
-        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.05, 0.10, 0.35, 0.35, 0.10, 0.05])
+        self.initial_speed_range = [210, 240, 270, 300, 330]
+        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.20, 0.20, 0.20, 0.20, 0.20])
+        self.speed = self.initial_speed
         self.base_value_x = 0
         self.base_value_y = 0
-        self.collision = None
+        self.collision = True
         
     def setup(self, cube_list, car_list):
         self.cube_list = cube_list
@@ -37,6 +37,17 @@ class car(arcade.Sprite):
 
     def set_car_list (self, car_list):
         self.car_list = car_list
+
+    def reduce_speed (self):
+        if( self.speed > 0):
+            self.speed += -15
+
+        if( self.speed > 210):
+            self.probability_change += 2
+    
+    def increase_speed (self):
+        if( self.speed < self.initial_speed or (self.stop_cube != None and self.in_transit == False)):
+            self.speed += 15
     
     def update(self, delta_time=0.50): 
         
@@ -49,21 +60,21 @@ class car(arcade.Sprite):
         y_diff = (dest_y + self.base_value_y) - start_y
         angle = math.atan2(y_diff, x_diff)
 
-        for cars in self.car_list:
-            if(self != cars):
-                if arcade.check_for_collision(self, cars):
-                    self.collision = False
-                    break
-                else:
-                    self.collision = True
+        self.check_speed = self.fov.check_distance(self.car_list)
+        if(self.check_speed != True):
+            self.reduce_speed()
+        else:
+            self.increase_speed()
+
+        #self.check_speed = True
             
         if self.collision == True:
             if self.frame_up == True:
                 self.angle = math.degrees(angle)
                 self.fov.set_angle(self.angle)
 
-                self.change_x = math.cos(angle)* 0.01 * self.initial_speed
-                self.change_y = math.sin(angle)* 0.01 * self.initial_speed
+                self.change_x = math.cos(angle)* 0.01 * self.speed
+                self.change_y = math.sin(angle)* 0.01 * self.speed
 
                 self.center_x = self.center_x + self.change_x
                 self.center_y = self.center_y + self.change_y
@@ -110,6 +121,7 @@ class car(arcade.Sprite):
         probability_perc = random.randint(1, 100)
 
         for cube in self.cube_list:
+            self.fov.search_my_cube(cube)
             if(cube.pos_x <= self.center_x and cube.pos_x + 60 > self.center_x and cube.pos_y <= self.center_y and cube.pos_y + 60 > self.center_y):
                 if(cube != self.my_cube):
                     self.my_cube = cube
@@ -169,6 +181,10 @@ class car(arcade.Sprite):
                                 self.frame_up = True
                             else:
                                 self.frame_up = False
+                                if(self.fov.my_cube != "semaforo"):
+                                   self.frame_up = True 
+                                else:
+                                    self.frame_up = False
                         else:
                             temp_x = self.temp_destx
                             temp_y = self.temp_desty
@@ -191,25 +207,49 @@ class car(arcade.Sprite):
                                             self.base_value_y = self.base_value_y - 1
                             else:
                                 if(self.stop_cube.pos == "nord"):
-                                    if(self.base_value_x < -105):
-                                        self.base_value_x = self.base_value_x + 1
+                                    if(self.speed > 270): 
+                                        if(self.base_value_x < -115):
+                                            self.base_value_x = self.base_value_x + 1
+                                        else:
+                                            self.base_value_x = 0
                                     else:
-                                        self.base_value_x = 0
+                                        if(self.base_value_x < -95):
+                                            self.base_value_x = self.base_value_x + 1
+                                        else:
+                                            self.base_value_x = 0
                                 elif(self.stop_cube.pos == "sud"):
-                                    if(self.base_value_x > 105):
-                                        self.base_value_x = self.base_value_x - 1
+                                    if(self.speed > 270): 
+                                        if(self.base_value_x > 115):
+                                            self.base_value_x = self.base_value_x - 1
+                                        else:
+                                            self.base_value_x = 0
                                     else:
-                                        self.base_value_x = 0
+                                        if(self.base_value_x > 95):
+                                            self.base_value_x = self.base_value_x - 1
+                                        else:
+                                            self.base_value_x = 0
                                 elif(self.stop_cube.pos == "est"):
-                                    if(self.base_value_y > 105):
-                                        self.base_value_y = self.base_value_y - 1
+                                    if(self.speed > 270):
+                                        if(self.base_value_y > 115):
+                                            self.base_value_y = self.base_value_y - 1
+                                        else:
+                                            self.base_value_y = 0
                                     else:
-                                        self.base_value_y = 0
+                                        if(self.base_value_y > 95):
+                                            self.base_value_y = self.base_value_y - 1
+                                        else:
+                                            self.base_value_y = 0
                                 elif(self.stop_cube.pos == "ovest"):
-                                    if(self.base_value_y < -105):
-                                        self.base_value_y = self.base_value_y + 1
+                                    if(self.speed > 270):
+                                        if(self.base_value_y < -115):
+                                            self.base_value_y = self.base_value_y + 1
+                                        else:
+                                            self.base_value_y = 0
                                     else:
-                                        self.base_value_y = 0
+                                        if(self.base_value_y < -95):
+                                            self.base_value_y = self.base_value_y + 1
+                                        else:
+                                            self.base_value_y = 0
                             temp_x = self.temp_destx
                             temp_y = self.temp_desty
                         else:
@@ -238,8 +278,12 @@ class car(arcade.Sprite):
                                 self.frame_up = True
                             else:
                                 self.frame_up = False
+                                if(self.fov.my_cube != 4):
+                                       self.frame_up = True 
+                                else:
+                                    self.frame_up = False
 
-                        if(self.frame_up == True):
+                        if(self.frame_up == True and self.check_speed == True):
                             if(self.stop_cube.cors == "right"):
                                     if(self.direction_perc != 1):
                                         if(self.stop_cube.pos == "nord"):
@@ -256,25 +300,49 @@ class car(arcade.Sprite):
                                                 self.base_value_y = self.base_value_y - 1
                             else:
                                 if(self.stop_cube.pos == "nord"):
-                                    if(self.base_value_x < -105):
-                                        self.base_value_x = self.base_value_x + 1
+                                    if(self.speed > 270): 
+                                        if(self.base_value_x < -115):
+                                            self.base_value_x = self.base_value_x + 1
+                                        else:
+                                            self.base_value_x = 0
                                     else:
-                                        self.base_value_x = 0
+                                        if(self.base_value_x < -95):
+                                            self.base_value_x = self.base_value_x + 1
+                                        else:
+                                            self.base_value_x = 0
                                 elif(self.stop_cube.pos == "sud"):
-                                    if(self.base_value_x > 105):
-                                        self.base_value_x = self.base_value_x - 1
+                                    if(self.speed > 270): 
+                                        if(self.base_value_x > 115):
+                                            self.base_value_x = self.base_value_x - 1
+                                        else:
+                                            self.base_value_x = 0
                                     else:
-                                        self.base_value_x = 0
+                                        if(self.base_value_x > 95):
+                                            self.base_value_x = self.base_value_x - 1
+                                        else:
+                                            self.base_value_x = 0
                                 elif(self.stop_cube.pos == "est"):
-                                    if(self.base_value_y > 105):
-                                        self.base_value_y = self.base_value_y - 1
+                                    if(self.speed > 270):
+                                        if(self.base_value_y > 115):
+                                            self.base_value_y = self.base_value_y - 1
+                                        else:
+                                            self.base_value_y = 0
                                     else:
-                                        self.base_value_y = 0
+                                        if(self.base_value_y > 95):
+                                            self.base_value_y = self.base_value_y - 1
+                                        else:
+                                            self.base_value_y = 0
                                 elif(self.stop_cube.pos == "ovest"):
-                                    if(self.base_value_y < -105):
-                                        self.base_value_y = self.base_value_y + 1
+                                    if(self.speed > 270):
+                                        if(self.base_value_y < -115):
+                                            self.base_value_y = self.base_value_y + 1
+                                        else:
+                                            self.base_value_y = 0
                                     else:
-                                        self.base_value_y = 0
+                                        if(self.base_value_y < -95):
+                                            self.base_value_y = self.base_value_y + 1
+                                        else:
+                                            self.base_value_y = 0
                         temp_x = self.temp_destx
                         temp_y = self.temp_desty
 
