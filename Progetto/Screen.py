@@ -39,7 +39,7 @@ class window(arcade.Window):
         self.current_bike_song = 0
 
         self.music = None
-        self.BACKGROUND_MUSIC_VOLUME = 0.3
+        self.BACKGROUND_MUSIC_VOLUME = 0
         self.CAR_MUSIC_VOLUME = 0.1
         self.TIR_MUSIC_VOLUME = 0.1
         self.BIKE_MUSIC_VOLUME = 0.1
@@ -96,43 +96,9 @@ class window(arcade.Window):
         self.car_list = arcade.SpriteList()
 
         auto1 = car("../Sprites/Car/car_1.png", 1)
-        auto2 = car("../Sprites/Car/car_2.png", 1)
-        auto3 = car("../Sprites/Car/car_3.png", 1)
-        auto4 = car("../Sprites/Car/car_4.png", 1)
-        auto5 = car("../Sprites/Car/car_5.png", 1)
-        auto6 = car("../Sprites/Car/TIR_1.png", 1)
-        auto7 = car("../Sprites/Car/TIR_2.png", 1)
-        auto8 = car("../Sprites/Car/TIR_3.png", 1)
-        auto9 = car("../Sprites/Car/bike_1.png", 1)
-        auto10 = car("../Sprites/Car/bike_2.png", 1)
-        auto11 = car("../Sprites/Car/bike_3.png", 1)
-
-
         auto1.setup(self.cube_list, self.car_list)
-        auto2.setup(self.cube_list, self.car_list)
-        auto3.setup(self.cube_list, self.car_list)
-        auto4.setup(self.cube_list, self.car_list)
-        auto5.setup(self.cube_list, self.car_list)
-        auto6.setup(self.cube_list, self.car_list)
-        auto7.setup(self.cube_list, self.car_list)
-        auto8.setup(self.cube_list, self.car_list)
-        auto9.setup(self.cube_list, self.car_list)
-        auto10.setup(self.cube_list, self.car_list)
-        auto11.setup(self.cube_list, self.car_list)
-
         self.car_list.append(auto1)
-        self.car_list.append(auto2)
-        self.car_list.append(auto3)
-        self.car_list.append(auto4)
-        self.car_list.append(auto5)
-        self.car_list.append(auto6)
-        self.car_list.append(auto7)
-        self.car_list.append(auto8)
-        self.car_list.append(auto9)
-        self.car_list.append(auto10)
-        self.car_list.append(auto11)
 
-        auto = numpy.random.choice(self.car_list, p=[0.12, 0.12, 0.12, 0.12, 0.12, 0.07, 0.07, 0.06, 0.07, 0.07, 0.06])
 
     def on_draw(self):       
         arcade.start_render()
@@ -142,28 +108,43 @@ class window(arcade.Window):
             car.fov.sprite.draw()
             car.fov.stop_sprite.draw()
         self.car_list.draw()
+        
+        
 
-        hours = int(self.total_execution_time) // 3600
-        minutes = int(self.total_execution_time) // 60
-        seconds = int(self.total_execution_time) % 60
+        height = 990
+        val = 0
+        for i in self.car_list:
+            val = val + 1
+            height = height - 30
+            if(i.collision == False):
+                output_draw_time = f"Velocita veicoli: {i.probability_change}"
+                arcade.draw_text(output_draw_time, 300, height, arcade.color.BLACK, 25)
 
-        elapsed_time_output = f"Elapsed Time: {hours:02d}:{minutes:02d}:{seconds:02d}"
-        arcade.draw_text(elapsed_time_output, 300, 960, arcade.color.BLACK, 25)
+        output_draw_time = f"Numero Veicoli: {val}"
+        arcade.draw_text(output_draw_time, 300, 990, arcade.color.BLACK, 25)
 
-        draw_start_time = timeit.default_timer()
 
-        output_processing_time = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output_processing_time, 300, 930, arcade.color.BLACK, 25)
-
-        output_draw_time = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
-
-        fps = self.fps.get_fps()
-        output_draw_text = f"FPS: {fps:3.0f}"
-        arcade.draw_text(output_draw_text, 300, 870, arcade.color.BLACK, 25)
-
-        self.draw_time = timeit.default_timer() - draw_start_time
-        self.fps.tick()
+        #hours = int(self.total_execution_time) // 3600
+        #minutes = int(self.total_execution_time) // 60
+        #seconds = int(self.total_execution_time) % 60
+ 
+        #elapsed_time_output = f"Elapsed Time: {hours:02d}:{minutes:02d}:{seconds:02d}"
+        #arcade.draw_text(elapsed_time_output, 300, 960, arcade.color.BLACK, 25)
+ 
+        #draw_start_time = timeit.default_timer()
+ 
+        #output_processing_time = f"Processing time: {self.processing_time:.3f}"
+        #arcade.draw_text(output_processing_time, 300, 930, arcade.color.BLACK, 25)
+ 
+        #output_draw_time = f"Drawing time: {self.draw_time:.3f}"
+        #arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
+ 
+        #fps = self.fps.get_fps()
+        #output_draw_text = f"FPS: {fps:3.0f}"
+        #arcade.draw_text(output_draw_text, 300, 870, arcade.color.BLACK, 25)
+ 
+        #self.draw_time = timeit.default_timer() - draw_start_time
+        #self.fps.tick()
 
     def advance_song(self):
         self.current_background_song += 1
@@ -190,7 +171,6 @@ class window(arcade.Window):
                     output = f"{total_program_time}, {self.fps.get_fps():.1f}, " \
                             f"{self.processing_time:.4f}, {self.draw_time:.4f}\n"
 
-                    print(output, end="")
                     self.results_file.write(output)
 
                 self.fps_list.append(round(self.fps.get_fps(), 1))
@@ -253,58 +233,60 @@ class window(arcade.Window):
             auto1.setup(self.cube_list, self.car_list)
             self.car_list.append(auto1)
 
-        if key == arcade.key.KEY_2:
-            auto2 = car("../Sprites/Car/car_2.png", 1)
-            auto2.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto2)
-
-        if key == arcade.key.KEY_3:
-            auto3 = car("../Sprites/Car/car_3.png", 1)
-            auto3.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto3)
-        
-        if key == arcade.key.KEY_4:
-            auto4 = car("../Sprites/Car/car_4.png", 1)
-            auto4.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto4)
-
-        if key == arcade.key.KEY_5:
-            auto5 = car("../Sprites/Car/car_5.png", 1)
-            auto5.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto5)
-        
-        if key == arcade.key.KEY_6:
-            auto6 = car("../Sprites/Car/TIR_1.png", 1)
-            auto6.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto6)
-
-        if key == arcade.key.KEY_7:
-            auto7 = car("../Sprites/Car/TIR_2.png", 1)
-            auto7.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto7)
-
-        if key == arcade.key.KEY_8:
-            auto8 = car("../Sprites/Car/TIR_3.png", 1)
-            auto8.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto8)
-
-
-        if key == arcade.key.KEY_9:
-            auto9 = car("../Sprites/Car/bike_1.png", 1)
-            auto9.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto9)
-
-
-        if key == arcade.key.KEY_0:
-            auto10 = car("../Sprites/Car/bike_2.png", 1)
-            auto10.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto10)
+        #if key == arcade.key.KEY_2:
+        #    auto2 = car("../Sprites/Car/car_2.png", 1)
+        #    auto2.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto2)
+ 
+        #if key == arcade.key.KEY_3:
+        #    auto3 = car("../Sprites/Car/car_3.png", 1)
+        #    auto3.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto3)
+        #
+        #if key == arcade.key.KEY_4:
+        #    auto4 = car("../Sprites/Car/car_4.png", 1)
+        #    auto4.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto4)
+ 
+        #if key == arcade.key.KEY_5:
+        #    auto5 = car("../Sprites/Car/car_5.png", 1)
+        #    auto5.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto5)
+        #
+        #if key == arcade.key.KEY_6:
+        #    auto6 = car("../Sprites/Car/TIR_1.png", 1)
+        #    auto6.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto6)
+ 
+        #if key == arcade.key.KEY_7:
+        #    auto7 = car("../Sprites/Car/TIR_2.png", 1)
+        #    auto7.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto7)
+ 
+        #if key == arcade.key.KEY_8:
+        #    auto8 = car("../Sprites/Car/TIR_3.png", 1)
+        #    auto8.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto8)
+ 
+ 
+        #if key == arcade.key.KEY_9:
+        #    auto9 = car("../Sprites/Car/bike_1.png", 1)
+        #    auto9.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto9)
+ 
+ 
+        #if key == arcade.key.KEY_0:
+        #    auto10 = car("../Sprites/Car/bike_2.png", 1)
+        #    auto10.setup(self.cube_list, self.car_list)
+        #    self.car_list.append(auto10)
 
 
         if key == arcade.key.P:
-            auto11 = car("../Sprites/Car/bike_3.png", 1)
-            auto11.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto11)
+            auto = car("../Sprites/Car/car_3.png", 1)
+            auto.ignore = True
+            auto.speed = 500
+            auto.setup(self.cube_list, self.car_list)
+            self.car_list.append(auto)
 
     def set_update_rate(self, rate: float):
 

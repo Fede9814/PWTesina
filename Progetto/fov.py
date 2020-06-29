@@ -75,11 +75,11 @@ class fov(arcade.PhysicsEngineSimple):
 
         fov_list = []
 
-        hitbox1 = "../Sprites/Hitbox/Hitbox_L60_W30.png"
+        hitbox1 = "../Sprites/Hitbox/Hitbox_L70_W30.png"
         hitbox2 = "../Sprites/Hitbox/Hitbox_L80_W30.png"
         hitbox3 = "../Sprites/Hitbox/Hitbox_L100_W30.png"
         hitbox4 = "../Sprites/Hitbox/Hitbox_L120_W30.png"
-        hitbox5 = "../Sprites/Hitbox/Hitbox_140_W30.png"
+        hitbox5 = "../Sprites/Hitbox/Hitbox_L140_W30.png"
 
         fov_list.append(hitbox1)
         fov_list.append(hitbox2)
@@ -87,18 +87,18 @@ class fov(arcade.PhysicsEngineSimple):
         fov_list.append(hitbox4)
         fov_list.append(hitbox5)
 
-        self.hitbox_fov = numpy.random.choice(fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
+        hitbox_fov = numpy.random.choice(fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
 
         #setta alpha a 0 per nascondere i fov delle macchine
         #self.hitbox.alpha = 255
-        self.sprite = arcade.Sprite(self.hitbox_fov, 1)
+        self.sprite = arcade.Sprite(hitbox_fov, 1)
         #setta alpha a 0 per nascondere i fov delle macchine
         self.sprite.alpha = 0
         pcx, pcy = self.center_calc(self.car)
         self.sprite.center_x = pcx
         self.sprite.center_y = pcy
 
-        self.stop_sprite = arcade.Sprite("../Concept Art/hitbox.png", 1)
+        self.stop_sprite = arcade.Sprite("../Sprites/Hitbox/Fixed_Hitbox_L20_W30.png", 1)
         self.stop_sprite.alpha = 0
         pcx, pcy = self.center_calc(self.car)
         self.stop_sprite.center_x = pcx
@@ -130,8 +130,6 @@ class fov(arcade.PhysicsEngineSimple):
     def search_my_cube(self, cube):
         if(cube.pos_x <= self.sprite.center_x and cube.pos_x + 60 > self.sprite.center_x and cube.pos_y <= self.sprite.center_y and cube.pos_y + 60 > self.sprite.center_y):
             self.my_cube = cube.val
-            if(cube.val == 4):
-                print(self.my_cube)
 
     def set_angle(self, value):
         self.sprite.angle = value
@@ -150,5 +148,35 @@ class fov(arcade.PhysicsEngineSimple):
             in_range = True
         return in_range
 
+    def check_bracking(self, car_list):
+            bracking = None
+            collided_car = None
+            collision_car = arcade.check_for_collision_with_list(self.stop_sprite, car_list)
+
+            for car in collision_car:
+                if(car.telaio != self.car.telaio):
+                    collided_car = car
+                    bracking = True
+                    break
+                else:
+                    bracking = False
+                    collided_car = self
+            return bracking, collided_car 
+
+    def check_car_collision (self, car_list):
+        skip_collision = None
+        for car in car_list:
+            if(car.telaio != self.car.telaio):
+                if arcade.check_for_collision(self.sprite, car):
+                    if(car.collision == True):
+                        skip_collision = True
+                        break
+                    else:
+                        skip_collision = False
+            
+        if (skip_collision == None):
+            skip_collision = False
+
+        return skip_collision
     
         
