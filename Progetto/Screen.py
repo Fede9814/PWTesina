@@ -30,20 +30,9 @@ class window(arcade.Window):
         self.global_spawn = 0
 
         self.background_music_list = []
-        self.car_music_list = []
-        self.tir_music_list = []
-        self.bike_music_list = []
-
         self.current_background_song = 0
-        self.current_car_song = 0
-        self.current_tir_song = 0
-        self.current_bike_song = 0
-
         self.music = None
-        self.BACKGROUND_MUSIC_VOLUME = 0
-        self.CAR_MUSIC_VOLUME = 0.1
-        self.TIR_MUSIC_VOLUME = 0.1
-        self.BIKE_MUSIC_VOLUME = 0.1
+        self.BACKGROUND_MUSIC_VOLUME = 0.1
 
         self.processing_time = 0
         self.draw_time = 0
@@ -60,24 +49,8 @@ class window(arcade.Window):
         self.background_music = arcade.Sound(self.background_music_list[self.current_background_song], streaming=True)
         self.background_music.play(self.BACKGROUND_MUSIC_VOLUME)
 
-    def play_car_song(self):
-        self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)
-        self.car_music.play(self.CAR_MUSIC_VOLUME)
-
-    def play_tir_song(self):
-        self.tir_music = arcade.Sound(self.tir_music_list[self.current_tir_song], streaming=True)
-        self.tir_music.play(self.TIR_MUSIC_VOLUME)
-
-    def play_bike_song(self):
-        self.bike_music = arcade.Sound(self.bike_music_list[self.current_bike_song], streaming=True)
-        self.bike_music.play(self.BIKE_MUSIC_VOLUME)
-    
-
     def setup(self):
         self.background_music_list = ["../Sound/traffic.wav"]
-        self.car_music_list = ["../Sound/1_crash.wav"]
-        self.tir_music_list = ["../Sound/2_splat.wav"]
-        self.bike_music_list = ["../Sound/3_burn.wav"]
         self.current_background_song = 0
         self.play_background_song()
         self.total_execution_time = 0.0
@@ -93,7 +66,6 @@ class window(arcade.Window):
                 x = x + 60
             y = y - 60  
       
-
         self.car_list = arcade.SpriteList()
 
         auto1 = car()
@@ -111,8 +83,6 @@ class window(arcade.Window):
 
         self.car_list[0].draw()
         
-        
-
         height = 990
         val = 0
         for i in self.car_list:
@@ -153,8 +123,6 @@ class window(arcade.Window):
         #self.draw_time = timeit.default_timer() - draw_start_time
         #self.fps.tick()
 
-
-
     def advance_song(self):
         self.current_background_song += 1
         if self.current_background_song >= len(self.background_music_list):
@@ -168,7 +136,6 @@ class window(arcade.Window):
             self.play_background_song()
 
         self.total_execution_time += delta_time
-
 
         start_time = timeit.default_timer()
         self.processing_time = timeit.default_timer() - start_time

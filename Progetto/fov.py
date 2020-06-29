@@ -148,20 +148,20 @@ class fov(arcade.PhysicsEngineSimple):
             in_range = True
         return in_range
 
-    def check_bracking(self, car_list):
-            bracking = None
+    def check_braking(self, car_list):
+            braking = None
             collided_car = None
             collision_car = arcade.check_for_collision_with_list(self.stop_sprite, car_list)
 
             for car in collision_car:
                 if(car.telaio != self.car.telaio):
                     collided_car = car
-                    bracking = True
+                    braking = True
                     break
                 else:
-                    bracking = False
+                    braking = False
                     collided_car = self
-            return bracking, collided_car 
+            return braking, collided_car 
 
     def check_car_collision (self, car_list):
         skip_collision = None

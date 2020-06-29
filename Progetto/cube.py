@@ -14,7 +14,7 @@ class cube():
     def recognition(self, pos_x, pos_y):
         cube = None
         if(self.val == 0):
-            cube = arcade.load_texture("../Sprites/Grass/grass.png")
+            cube = arcade.load_texture("../Sprites/Grass/grass1.png")
             cube.draw_scaled(self.center_x, self.center_y)
         elif(self.val == 1):
             cube = arcade.load_texture("../Sprites/Road_blocks/start.png")
