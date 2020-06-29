@@ -5,7 +5,7 @@ import numpy
 import random
 from fov import *
 
-
+incidenti = 0
 imagelist = [
     "../Sprites/Car/car_1.png",
     "../Sprites/Car/car_2.png",
@@ -14,17 +14,17 @@ imagelist = [
     "../Sprites/Car/car_5.png",
     "../Sprites/Car/TIR_1.png",
     "../Sprites/Car/TIR_2.png",
-    "../Sprites/Car/TIR_3.png",
-    "../Sprites/Car/bike_1.png",
-    "../Sprites/Car/bike_2.png",
-    "../Sprites/Car/bike_3.png"
+    "../Sprites/Car/TIR_3.png"
+    #"../Sprites/Car/bike_1.png",
+    #"../Sprites/Car/bike_2.png",
+    #"../Sprites/Car/bike_3.png"
     ]
 
 
 class car(arcade.Sprite):
-    def __init__(self, scale):
-        super().__init__(scale)
-        filename = numpy.random.choice(imagelist, p = [0.1, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09])
+    def __init__(self):
+        super().__init__()
+        filename = numpy.random.choice(imagelist, p = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125])
         self.texture = arcade.load_texture(filename)
         self.telaio = numpy.random.randint(0, 1000000, 1)
         self.frame_up = True
@@ -34,8 +34,8 @@ class car(arcade.Sprite):
         self.stop_cube = None
         #max speed = 330, after that it explodes.
         #reasonable range: 150 < v < 300
-        self.initial_speed_range = [180, 210, 240, 270, 300, 330]
-        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.16, 0.16, 0.17, 0.17, 0.17, 0.17])
+        self.initial_speed_range = [210, 240, 270, 300, 330]
+        self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.2, 0.2, 0.2, 0.2, 0.2])
         self.speed = self.initial_speed
         self.base_value_x = 0
         self.base_value_y = 0
@@ -45,7 +45,9 @@ class car(arcade.Sprite):
         self.frame_count = 0
         self.despawn_count = 100
         
-        
+    def draw(self):
+        output_draw_time = f"Incidenti: {incidenti}"
+        arcade.draw_text(output_draw_time, 300, 930, arcade.color.BLACK, 25)
         
     def setup(self, cube_list, car_list):
         self.cube_list = cube_list
@@ -58,23 +60,22 @@ class car(arcade.Sprite):
     def set_car_list (self, car_list):
         self.car_list = car_list
 
-    def reduce_speed (self):
-        if( self.speed >= 15 and self.ignore == False):
-            self.speed += -15
+    def reduce_speed (self, reduce):
+        if(self.speed >= reduce and self.ignore == False):
+            self.speed -= reduce
 
-        if( self.speed > 210):
+        if(self.speed > 210):
             self.probability_change += 2
     
     def increase_speed (self):
-        if( self.speed < self.initial_speed or (self.stop_cube != None and self.in_transit == False) and self.speed < 400):
+        if(self.speed < self.initial_speed or (self.stop_cube != None and self.in_transit == False) and self.speed < 400):
             self.speed += 15
 
     def brack_in_time (self, car):
         if(car.speed < self.speed):
-            self.speed = self.speed/2
-            self.reduce_speed()
+            self.reduce_speed(30)
         else:
-            self.reduce_speed()
+            self.reduce_speed(15)
 
     def check_collision(self, car_list):
             in_range = None
@@ -85,6 +86,8 @@ class car(arcade.Sprite):
                         if(self.frame_count > self.despawn_count):
                             self.kill()
                             car.kill()
+                            global incidenti 
+                            incidenti += 1
                         break
                     else:
                         in_range = False
@@ -105,7 +108,7 @@ class car(arcade.Sprite):
 
         self.check_speed = self.fov.check_distance(self.car_list)
         if(self.check_speed != True):
-            self.reduce_speed()
+            self.reduce_speed(15)
         else:
             self.increase_speed()
 
@@ -116,7 +119,7 @@ class car(arcade.Sprite):
         #self.check_speed = True
 
         self.skip_collision = self.fov.check_car_collision(self.car_list)
-        if(self.skip_collision == True):
+        if(self.skip_collision == True and self.stop_cube == None):
             self.probability_change = 0
             self.temp_destx = self.last_change_x
             self.temp_desty = self.last_change_y
@@ -196,7 +199,7 @@ class car(arcade.Sprite):
                                 else:
                                     temp_x = cube.next_left_x
                                     temp_y = cube.next_left_y
-                                    self.probability_change = 0
+                                self.probability_change = 0
                             else:
                                 if(cube.cors == "right"):
                                     temp_x = cube.next_right_x

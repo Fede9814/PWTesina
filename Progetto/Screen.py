@@ -27,6 +27,7 @@ class window(arcade.Window):
         self.yellow_count = 0
         self.yellow_time = 20
         self.red_time = 120
+        self.global_spawn = 0
 
         self.background_music_list = []
         self.car_music_list = []
@@ -95,7 +96,7 @@ class window(arcade.Window):
 
         self.car_list = arcade.SpriteList()
 
-        auto1 = car(1)
+        auto1 = car()
         auto1.setup(self.cube_list, self.car_list)
         self.car_list.append(auto1)
 
@@ -107,6 +108,8 @@ class window(arcade.Window):
             car.fov.sprite.draw()
             car.fov.stop_sprite.draw()
         self.car_list.draw()
+
+        self.car_list[0].draw()
         
         
 
@@ -114,13 +117,18 @@ class window(arcade.Window):
         val = 0
         for i in self.car_list:
             val = val + 1
-            height = height - 30
-            if(i.collision == False):
-                output_draw_time = f"Velocita veicoli: {i.probability_change}"
-                arcade.draw_text(output_draw_time, 300, height, arcade.color.BLACK, 25)
+        #    height = height - 30
+        #    if(i.collision == False):
+        #        output_draw_time = f"Velocita veicoli: {i.probability_change}"
+        #        arcade.draw_text(output_draw_time, 300, height, arcade.color.BLACK, 25)
 
         output_draw_time = f"Numero Veicoli: {val}"
         arcade.draw_text(output_draw_time, 300, 990, arcade.color.BLACK, 25)
+
+        output_draw_time = f"Frame Count: {self.global_spawn}"
+        arcade.draw_text(output_draw_time, 300, 960, arcade.color.BLACK, 25)
+
+
 
 
         #hours = int(self.total_execution_time) // 3600
@@ -153,6 +161,7 @@ class window(arcade.Window):
             self.current_background_song = 0
 
     def on_update(self, delta_time=0.50):
+        self.global_spawn += 1
         background_music_looper = self.background_music.get_stream_position()
         if background_music_looper == 0.0:
             self.advance_song()
@@ -205,6 +214,17 @@ class window(arcade.Window):
         for car in self.car_list:
             car.fov.sprite.update()
             car.fov.stop_sprite.update()
+
+        if(self.global_spawn % 50 == 0):
+            self.spawn_car()
+            
+
+    def spawn_car(self):
+        auto1 = car()
+        auto1.setup(self.cube_list, self.car_list)
+        self.car_list.append(auto1)
+
+
         
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F:
@@ -228,12 +248,12 @@ class window(arcade.Window):
                 self.change = 1   
 
         if key == arcade.key.KEY_1:
-            auto1 = car(1)
+            auto1 = car()
             auto1.setup(self.cube_list, self.car_list)
             self.car_list.append(auto1)
 
         if key == arcade.key.P:
-            auto = car("../Sprites/Car/car_3.png", 1)
+            auto = car()
             auto.ignore = True
             auto.speed = 500
             auto.setup(self.cube_list, self.car_list)
