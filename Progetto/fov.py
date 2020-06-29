@@ -70,16 +70,36 @@ class fov(arcade.PhysicsEngineSimple):
                         (self.fixed_value * self.μ_value)))
         # print("B_dist",self.B_dist)
 
-        self.FOV_length = self.R_dist + self.B_dist
-
     
     def setup(self):
-        self.sprite = arcade.Sprite("../Concept Art/hitbox.png", self.FOV_length)
+
+        self.fov_list = arcade.SpriteList()
+
+        hitbox1 = hitbox("../Sprites/Hitbox/Hitbox_L60_W55.png", 1)
+        hitbox2 = hitbox("../Sprites/Hitbox/Hitbox_L80_W55.png", 1)
+        hitbox3 = hitbox("../Sprites/Hitbox/Hitbox_L100_W55.png", 1)
+        hitbox4 = hitbox("../Sprites/Hitbox/Hitbox_L120_W55.png", 1)
+        hitbox5 = hitbox("../Sprites/Hitbox/Hitbox_140_W55.png", 1)
+
+        hitbox1.setup(self.fov_list)
+        hitbox2.setup(self.fov_list)
+        hitbox3.setup(self.fov_list)
+        hitbox4.setup(self.fov_list)
+        hitbox5.setup(self.fov_list)
+
+        self.fov_list.append(hitbox1)
+        self.fov_list.append(hitbox2)
+        self.fov_list.append(hitbox3)
+        self.fov_list.append(hitbox4)
+        self.fov_list.append(hitbox5)
+
+        self.hitbox_fov = numpy.random.choice(self.fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
+
         #setta alpha a 0 per nascondere i fov delle macchine
-        self.sprite.alpha = 255
+        #self.hitbox.alpha = 255
         pcx, pcy = self.center_calc(self.car)
-        self.sprite.center_x = pcx
-        self.sprite.center_y = pcy
+        self.hitbox_fov.center_x = pcx
+        self.hitbox_fov.center_y = pcy
 
     def center_calc(self, car):
         punto_a = car.points[1]
@@ -98,12 +118,12 @@ class fov(arcade.PhysicsEngineSimple):
 
     def move(self):
         pcx, pcy = self.center_calc(self.car)
-        self.sprite.center_x = pcx
-        self.sprite.center_y = pcy
+        self.hitbox.center_x = pcx
+        self.hitbox.center_y = pcy
 
 
     def set_angle(self, value):
-        self.sprite.angle = value
+        self.hitbox.angle = value
 
     
         

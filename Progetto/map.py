@@ -1,9 +1,9 @@
 #legenda
 # 0: boundaries
-# 1: accesso
-# 2: uscita
-# 3: strada
-# 4: semaforo
+# 1: in
+# 2: out
+# 3: road
+# 4: trafficlight/stop
 
 map = [
 
