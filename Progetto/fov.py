@@ -75,11 +75,11 @@ class fov(arcade.PhysicsEngineSimple):
 
         fov_list = []
 
-        hitbox1 = "../Sprites/Hitbox/Hitbox_L60_W30.png"
+        hitbox1 = "../Sprites/Hitbox/Hitbox_L70_W30.png"
         hitbox2 = "../Sprites/Hitbox/Hitbox_L80_W30.png"
         hitbox3 = "../Sprites/Hitbox/Hitbox_L100_W30.png"
         hitbox4 = "../Sprites/Hitbox/Hitbox_L120_W30.png"
-        hitbox5 = "../Sprites/Hitbox/Hitbox_140_W30.png"
+        hitbox5 = "../Sprites/Hitbox/Hitbox_L140_W30.png"
 
         fov_list.append(hitbox1)
         fov_list.append(hitbox2)

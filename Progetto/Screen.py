@@ -95,44 +95,9 @@ class window(arcade.Window):
 
         self.car_list = arcade.SpriteList()
 
-        auto1 = car("../Sprites/Car/car_1.png", 1)
-        auto2 = car("../Sprites/Car/car_2.png", 1)
-        auto3 = car("../Sprites/Car/car_3.png", 1)
-        auto4 = car("../Sprites/Car/car_4.png", 1)
-        auto5 = car("../Sprites/Car/car_5.png", 1)
-        auto6 = car("../Sprites/Car/TIR_1.png", 1)
-        auto7 = car("../Sprites/Car/TIR_2.png", 1)
-        auto8 = car("../Sprites/Car/TIR_3.png", 1)
-        auto9 = car("../Sprites/Car/bike_1.png", 1)
-        auto10 = car("../Sprites/Car/bike_2.png", 1)
-        auto11 = car("../Sprites/Car/bike_3.png", 1)
-
-
+        auto1 = car(1)
         auto1.setup(self.cube_list, self.car_list)
-        auto2.setup(self.cube_list, self.car_list)
-        auto3.setup(self.cube_list, self.car_list)
-        auto4.setup(self.cube_list, self.car_list)
-        auto5.setup(self.cube_list, self.car_list)
-        auto6.setup(self.cube_list, self.car_list)
-        auto7.setup(self.cube_list, self.car_list)
-        auto8.setup(self.cube_list, self.car_list)
-        auto9.setup(self.cube_list, self.car_list)
-        auto10.setup(self.cube_list, self.car_list)
-        auto11.setup(self.cube_list, self.car_list)
-
         self.car_list.append(auto1)
-        self.car_list.append(auto2)
-        self.car_list.append(auto3)
-        self.car_list.append(auto4)
-        self.car_list.append(auto5)
-        self.car_list.append(auto6)
-        self.car_list.append(auto7)
-        self.car_list.append(auto8)
-        self.car_list.append(auto9)
-        self.car_list.append(auto10)
-        self.car_list.append(auto11)
-
-        auto = numpy.random.choice(self.car_list, p=[0.12, 0.12, 0.12, 0.12, 0.12, 0.07, 0.07, 0.06, 0.07, 0.07, 0.06])
 
     def on_draw(self):       
         arcade.start_render()
@@ -249,62 +214,9 @@ class window(arcade.Window):
                 self.change = 1   
 
         if key == arcade.key.KEY_1:
-            auto1 = car("../Sprites/Car/car_1.png", 1)
+            auto1 = car(1)
             auto1.setup(self.cube_list, self.car_list)
             self.car_list.append(auto1)
-
-        if key == arcade.key.KEY_2:
-            auto2 = car("../Sprites/Car/car_2.png", 1)
-            auto2.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto2)
-
-        if key == arcade.key.KEY_3:
-            auto3 = car("../Sprites/Car/car_3.png", 1)
-            auto3.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto3)
-        
-        if key == arcade.key.KEY_4:
-            auto4 = car("../Sprites/Car/car_4.png", 1)
-            auto4.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto4)
-
-        if key == arcade.key.KEY_5:
-            auto5 = car("../Sprites/Car/car_5.png", 1)
-            auto5.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto5)
-        
-        if key == arcade.key.KEY_6:
-            auto6 = car("../Sprites/Car/TIR_1.png", 1)
-            auto6.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto6)
-
-        if key == arcade.key.KEY_7:
-            auto7 = car("../Sprites/Car/TIR_2.png", 1)
-            auto7.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto7)
-
-        if key == arcade.key.KEY_8:
-            auto8 = car("../Sprites/Car/TIR_3.png", 1)
-            auto8.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto8)
-
-
-        if key == arcade.key.KEY_9:
-            auto9 = car("../Sprites/Car/bike_1.png", 1)
-            auto9.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto9)
-
-
-        if key == arcade.key.KEY_0:
-            auto10 = car("../Sprites/Car/bike_2.png", 1)
-            auto10.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto10)
-
-
-        if key == arcade.key.P:
-            auto11 = car("../Sprites/Car/bike_3.png", 1)
-            auto11.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto11)
 
     def set_update_rate(self, rate: float):
 

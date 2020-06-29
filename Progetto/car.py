@@ -5,9 +5,27 @@ import numpy
 import random
 from fov import *
 
+
+imagelist = [
+    "../Sprites/Car/car_1.png",
+    "../Sprites/Car/car_2.png",
+    "../Sprites/Car/car_3.png",
+    "../Sprites/Car/car_4.png",
+    "../Sprites/Car/car_5.png",
+    "../Sprites/Car/TIR_1.png",
+    "../Sprites/Car/TIR_2.png",
+    "../Sprites/Car/TIR_3.png",
+    "../Sprites/Car/bike_1.png",
+    "../Sprites/Car/bike_2.png",
+    "../Sprites/Car/bike_3.png"
+    ]
+
+
 class car(arcade.Sprite):
-    def __init__(self, image, scale):
-        super().__init__(image, scale)
+    def __init__(self, scale):
+        super().__init__(scale)
+        filename = numpy.random.choice(imagelist, p = [0.1, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09])
+        self.texture = arcade.load_texture(filename)
         self.telaio = numpy.random.randint(0, 1000000, 1)
         self.frame_up = True
         self.probability_change = 1
@@ -26,6 +44,7 @@ class car(arcade.Sprite):
         self.base_value_x = 0
         self.base_value_y = 0
         self.collision = True
+        
         
     def setup(self, cube_list, car_list):
         self.cube_list = cube_list
