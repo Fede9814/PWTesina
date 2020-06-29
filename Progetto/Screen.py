@@ -165,13 +165,14 @@ class window(arcade.Window):
         self.draw_time = timeit.default_timer() - draw_start_time
         self.fps.tick()
 
+
+
     def advance_song(self):
         self.current_background_song += 1
         if self.current_background_song >= len(self.background_music_list):
             self.current_background_song = 0
 
     def on_update(self, delta_time=0.50):
-
         background_music_looper = self.background_music.get_stream_position()
         if background_music_looper == 0.0:
             self.advance_song()
@@ -196,7 +197,6 @@ class window(arcade.Window):
                 self.fps_list.append(round(self.fps.get_fps(), 1))
                 self.processing_time_list.append(self.processing_time)
                 self.drawing_time_list.append(self.draw_time)
-
         if(self.frame_count % self.red_time == 0 and self.frame_count != 0):
             self.yellow_start = True
             if(self.yellow_count == 0):
