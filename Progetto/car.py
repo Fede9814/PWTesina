@@ -4,7 +4,7 @@ import os
 import numpy
 import random
 from fov import *
-
+import Screen
 
 imagelist = [
     "../Sprites/Car/car_1.png",
@@ -20,12 +20,11 @@ imagelist = [
     "../Sprites/Car/bike_3.png"
     ]
 
-
 class car(arcade.Sprite):
     def __init__(self, scale):
         super().__init__(scale)
-        filename = numpy.random.choice(imagelist, p = [0.1, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09])
-        self.texture = arcade.load_texture(filename)
+        self.filename = numpy.random.choice(imagelist, p = [0.1, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09])
+        self.texture = arcade.load_texture(self.filename)
         self.telaio = numpy.random.randint(0, 1000000, 1)
         self.frame_up = True
         self.probability_change = 1
@@ -44,8 +43,15 @@ class car(arcade.Sprite):
         self.ignore = False
         self.frame_count = 0
         self.despawn_count = 100
-        
-        
+        self.car_music_list = []
+        self.tir_music_list = []
+        self.bike_music_list = []
+        self.current_car_song = 0
+        self.current_tir_song = 0
+        self.current_bike_song = 0
+        self.CAR_MUSIC_VOLUME = 0.1
+        self.TIR_MUSIC_VOLUME = 0.1
+        self.BIKE_MUSIC_VOLUME = 0.1
         
     def setup(self, cube_list, car_list):
         self.cube_list = cube_list
@@ -54,6 +60,21 @@ class car(arcade.Sprite):
         self.angle = 0 
         self.fov = fov(self.center_x, self.center_y, self.angle, self)
         self.fov.setup()
+        self.car_music_list = ["../Sound/1_crash.wav"]
+        self.tir_music_list = ["../Sound/2_splat.wav"]
+        self.bike_music_list = ["../Sound/3_burn.wav"]
+
+    def play_car_song(self):
+        self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)
+        self.car_music.play(self.CAR_MUSIC_VOLUME)
+    
+    def play_tir_song(self):
+        self.tir_music = arcade.Sound(self.tir_music_list[self.current_tir_song], streaming=True)
+        self.tir_music.play(self.TIR_MUSIC_VOLUME)
+     
+    def play_bike_song(self):
+        self.bike_music = arcade.Sound(self.bike_music_list[self.current_bike_song], streaming=True)
+        self.bike_music.play(self.BIKE_MUSIC_VOLUME)
 
     def set_car_list (self, car_list):
         self.car_list = car_list
@@ -69,7 +90,7 @@ class car(arcade.Sprite):
         if( self.speed < self.initial_speed or (self.stop_cube != None and self.in_transit == False) and self.speed < 400):
             self.speed += 15
 
-    def brack_in_time (self, car):
+    def brake_in_time (self, car):
         if(car.speed < self.speed):
             self.speed = self.speed/2
             self.reduce_speed()
@@ -83,6 +104,13 @@ class car(arcade.Sprite):
                     if arcade.check_for_collision(self, car):
                         in_range = True
                         if(self.frame_count > self.despawn_count):
+                            
+                            if self.filename == "../Sprites/Car/car_1.png" or self.filename == "../Sprites/Car/car_2.png" or self.filename == "../Sprites/Car/car_3.png" or self.filename == "../Sprites/Car/car_4.png" or self.filename == "../Sprites/Car/car_5.png":
+                                car.play_car_song()
+                            elif self.filename == "../Sprites/Car/TIR_1.png" or self.filename == "../Sprites/Car/TIR_2.png" or self.filename == "../Sprites/Car/TIR_3.png":
+                                car.play_tir_song()
+                            elif self.filename == "../Sprites/Car/bike_1.png" or self.filename == "../Sprites/Car/bike_2.png" or self.filename == "../Sprites/Car/bike_3.png":
+                                car.play_bike_song()
                             self.kill()
                             car.kill()
                         break
@@ -109,9 +137,9 @@ class car(arcade.Sprite):
         else:
             self.increase_speed()
 
-        self.check_brack, front_car = self.fov.check_bracking(self.car_list)
-        if(self.check_brack == True and self.ignore == False):
-            self.brack_in_time(front_car)
+        self.check_brake, front_car = self.fov.check_braking(self.car_list)
+        if(self.check_brake == True and self.ignore == False):
+            self.brake_in_time(front_car)
 
         #self.check_speed = True
 
@@ -122,9 +150,7 @@ class car(arcade.Sprite):
             self.temp_desty = self.last_change_y
 
         self.collision = self.check_collision(self.car_list)
-
-
-            
+  
         if self.collision == False:
             if self.frame_up == True:
                 self.angle = math.degrees(angle)
@@ -468,5 +494,3 @@ class car(arcade.Sprite):
                 temp_y = 660
 
         return temp_x, temp_y
-
-
