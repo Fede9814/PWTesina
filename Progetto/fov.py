@@ -3,6 +3,10 @@ import math
 import os
 import numpy
 import random
+import string
+import names
+import numpy
+import json
 
 #LARGHEZZA < 55
 #LUNGHEZZA < L CAR
@@ -70,7 +74,102 @@ class fov(arcade.PhysicsEngineSimple):
                         (self.fixed_value * self.μ_value)))
         # print("B_dist",self.B_dist)
 
-    
+        #Age correction
+        self.true_age = self.age + random.randint(0, 9)
+
+        #VehicleID
+        self.VehicleID = random.randint(100000, 999999)
+
+        #Car model, displacement, tax and insurance status
+        car_model_list = ["Peugeot-Citroen",
+                          "Suzuki",
+                          "FCA",
+                          "Honda" ,
+                          "Ford",
+                          "Hyundai-Kia",
+                          "General Motors",
+                          "Renault-Nissan",
+                          "Toyota",
+                          "VW Group"]
+        self.car_model = numpy.random.choice(car_model_list, p = 
+            [0.03, 0.03, 0.05, 0.06, 0.08, 0.12, 0.12, 0.15, 0.15, 0.21])
+        
+        Displacement_list = ["1200", "1300", "1400", "1600", "2000"]
+        self.Displacement = random.choice(Displacement_list)
+
+        Tax_status_list = ["Paid", "Unpaid"]
+        self.Tax_status = numpy.random.choice(Tax_status_list, p = [0.95, 0.05])
+
+        Insurance_status_list = ["Paid", "Unpaid"]
+        self.Insurance_status = numpy.random.choice(Insurance_status_list, p = [0.95, 0.05])
+
+
+        #Plate info
+        self.plate_chars = []
+        self.Chars = string.ascii_uppercase
+        self.middle_numbers = str(random.randint(100, 999))
+        self.CharI = random.choice(self.Chars)
+        self.plate_chars.append(self.CharI)
+        self.CharII = random.choice(self.Chars)
+        self.plate_chars.append(self.CharII)
+        self.plate_chars.append(self.middle_numbers)
+        self.CharIII = random.choice(self.Chars)
+        self.plate_chars.append(self.CharIII)
+        self.CharIV = random.choice(self.Chars)
+        self.plate_chars.append(self.CharIV)
+
+        self.plate = ''.join(self.plate_chars)
+
+        #Region initials
+        region_list = [
+            "AL","AN","AO","AQ","AR","AP",
+            "AT","AV","BA","BT","BL","BN",
+            "BG","BI","BO","BZ","BS","BR",
+            "CA","CL","CB","CI","CE","CT",
+            "CZ","CH","CO","CS","CR","KR",
+            "CN","EN","FM","FE","FI","FG",
+            "FC","FR","GE","GO","GR","IM",
+            "IS","SP","LT","LE","LC","LI",
+            "LO","LU","MC","MN","MS","MT",
+            "VS","ME","MI","MO","MB","NA",
+            "NO","NU","OG","OT","OR","PD",
+            "PA","PR","PV","PG","PU","PE",
+            "PC","PI","PT","PN","PZ","PO",
+            "RG","RA","RC","RE","RI","RN",
+            "RO","SA","SS","SV","SI","SR",
+            "SO","TA","TE","TR","TO","TP",
+            "TN","TV","TS","UD","VA","VE",
+            "VB","VC","VR","VV","VI","VT"
+            ]
+
+        self.region = random.choice(region_list)
+
+        #Pilot full name generator
+        gender = [0, 1]
+        self.gender_picker = numpy.random.choice(gender, p = [0.54, 0.46])
+        if self.gender_picker == 0:
+            self.pilot_sex = "F"
+            self.pilot_name = names.get_first_name(gender='female')
+            self.pilot_surname = names.get_last_name()
+        elif self.gender_picker == 1:
+            self.pilot_sex = "M"
+            self.pilot_name =  names.get_full_name(gender='male')
+            self.pilot_surname = names.get_last_name()
+
+        self.Json =  {
+                "IDVehicle" : self.VehicleID,
+                "Gender": self.pilot_sex,
+                "Age": self.true_age,
+                "Name": self.pilot_name,
+                "Surname": self.pilot_surname,
+                "Plate": self.plate,
+                "Region": self.region,
+                "Model" : self.car_model,
+                "Displacement" : self.Displacement,
+                "CarTax" : self.Tax_status,
+                "Insurance" : self.Insurance_status,
+                }
+
     def setup(self):
 
         fov_list = []
