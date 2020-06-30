@@ -134,7 +134,7 @@ Json =  {
 print(Json)"""
 
 
-car_model_list = ["Peugeot-Citroen",
+"""car_model_list = ["Peugeot-Citroen",
                   "Suzuki",
                   "FCA",
                   "Honda" ,
@@ -156,4 +156,13 @@ Tax_status = numpy.random.choice(Tax_status_list, p = [0.95, 0.05])
 print(Tax_status)
 Insurance_status_list = ["Paid", "Unpaid"]
 Insurance_status = numpy.random.choice(Insurance_status_list, p = [0.95, 0.05])
-print(Insurance_status)
+print(Insurance_status)"""
+
+ID_Chars = []
+IDChars = string.ascii_uppercase
+ID_Numbers = random.randint(1000, 9999)
+IDChar = random.choice(IDChars)
+ID_Chars.append(IDChar)
+ID_Chars.append(ID_Numbers)
+IDVehicle = ''.join(ID_Chars)
+print(IDVehicle)

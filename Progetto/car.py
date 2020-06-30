@@ -3,12 +3,11 @@ import math
 import os
 import numpy
 import random
-from fov import *
 import screen
+from fov import *
 import datetime
 
 incidenti = 0
-
 
 imagelist = [
     "../Sprites/Car/car_1.png",
@@ -35,8 +34,6 @@ class car(arcade.Sprite):
         self.my_cube = None
         self.in_transit = False
         self.stop_cube = None
-        #max speed = 330, after that it explodes.
-        #reasonable range: 150 < v < 300
         self.initial_speed_range = [210, 240, 270, 300, 330]
         self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.2, 0.2, 0.2, 0.2, 0.2])
         self.speed = self.initial_speed
@@ -56,10 +53,6 @@ class car(arcade.Sprite):
         self.CAR_MUSIC_VOLUME = 0.1
         self.TIR_MUSIC_VOLUME = 0.1
         self.BIKE_MUSIC_VOLUME = 0.1
-
-    def deathClock(self):
-        self.death_time = datetime.datetime.now()
-        return self.death_time
         
     def draw(self):
         output_draw_time = f"Incidenti: {incidenti}"
@@ -123,7 +116,6 @@ class car(arcade.Sprite):
                             elif self.filename == "../Sprites/Car/bike_1.png" or self.filename == "../Sprites/Car/bike_2.png" or self.filename == "../Sprites/Car/bike_3.png":
                                 car.play_bike_song()
                             self.kill()
-                            self.deathClock()
                             car.kill()
 
                             global incidenti 
@@ -135,7 +127,7 @@ class car(arcade.Sprite):
                 in_range = False
             return in_range
     
-    def update(self, delta_time=0.50): 
+    def update(self, delta_time=0.50):
         
         start_x = self.center_x
         start_y = self.center_y

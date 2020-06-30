@@ -1,3 +1,4 @@
+import pyodbc
 import arcade
 import math
 import os
@@ -8,9 +9,15 @@ import names
 import numpy
 import json
 import datetime
+from car import *
 
-#LARGHEZZA < 55
-#LUNGHEZZA < L CAR
+conn = pyodbc.connect('Driver={SQL Server};'
+                        'Server=DESKTOP-7PATCN6\SQL;'
+                        'Database=test;'
+                        'Trusted_Connection=yes;')
+
+cursor = conn.cursor()
+
 
 class fov(arcade.PhysicsEngineSimple):
     def __init__(self, center_x, center_y, angle, car):
@@ -75,28 +82,33 @@ class fov(arcade.PhysicsEngineSimple):
                         (self.fixed_value * self.μ_value)))
         # print("B_dist",self.B_dist)
 
+
         #Birth/Life/Death/Synthesis...Jenova is always there for you...
         self.Birth = datetime.datetime.now()
-        self.Death = car.death_time
-        self.Life = self.Death - self.Birth
 
         #Age correction
-        self.true_age = self.age + random.randint(0, 9)
+        self.true_age = int(self.age + random.randint(0, 9))
 
         #VehicleID
-        self.VehicleID = random.randint(100000, 999999)
+        self.ID_Chars = []
+        self.IDChars = string.ascii_uppercase
+        self.ID_Numbers = str(random.randint(1000, 9999))
+        self.IDChar = random.choice(self.IDChars)
+        self.ID_Chars.append(self.IDChar)
+        self.ID_Chars.append(self.ID_Numbers)
+        self.IDVehicle = str(''.join(self.ID_Chars))
 
-        #Car model, displacement, tax and insurance status
         car_model_list = ["Peugeot-Citroen",
-                          "Suzuki",
-                          "FCA",
-                          "Honda" ,
-                          "Ford",
-                          "Hyundai-Kia",
-                          "General Motors",
-                          "Renault-Nissan",
-                          "Toyota",
-                          "VW Group"]
+            "Suzuki",
+            "FCA",
+            "Honda",
+            "Ford",
+            "Hyundai-Kia",
+            "General Motors",
+            "Renault-Nissan",
+            "Toyota",
+            "VW Group"]
+
         self.car_model = numpy.random.choice(car_model_list, p = 
             [0.03, 0.03, 0.05, 0.06, 0.08, 0.12, 0.12, 0.15, 0.15, 0.21])
         
@@ -108,7 +120,6 @@ class fov(arcade.PhysicsEngineSimple):
 
         Insurance_status_list = ["Paid", "Unpaid"]
         self.Insurance_status = numpy.random.choice(Insurance_status_list, p = [0.95, 0.05])
-
 
         #Plate info
         self.plate_chars = []
@@ -150,7 +161,6 @@ class fov(arcade.PhysicsEngineSimple):
 
         self.region = random.choice(region_list)
 
-        #Pilot full name generator
         gender = [0, 1]
         self.gender_picker = numpy.random.choice(gender, p = [0.54, 0.46])
         if self.gender_picker == 0:
@@ -162,22 +172,10 @@ class fov(arcade.PhysicsEngineSimple):
             self.pilot_name =  names.get_full_name(gender='male')
             self.pilot_surname = names.get_last_name()
 
-        self.Json_car =  {
-                "CarBirthTime":     self.Birth,
-                "CarDeathTime":     self.Death,
-                "CarLifeSpan":      self.Life ,
-                "IDVehicle" :       self.VehicleID,
-                "Gender":           self.pilot_sex,
-                "Age":              self.true_age,
-                "Name":             self.pilot_name,
-                "Surname":          self.pilot_surname,
-                "Plate":            self.plate,
-                "Region":           self.region,
-                "Model" :           self.car_model,
-                "Displacement" :    self.Displacement,
-                "CarTax" :          self.Tax_status,
-                "Insurance" :       self.Insurance_status,
-                }
+    def queryThis(self):
+        self.cursor = cursor
+        self.cursor.execute("INSERT INTO dbo.Car_Information (CarBirthTime, IDVehicle, Gender, Age, Name, Surname, Plate, Region, Model, Displacement, CarTax, Insurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (self.Birth, self.IDVehicle, self.pilot_sex, self.true_age, self.pilot_name, self.pilot_surname, self.plate, self.region, self.car_model, self.Displacement, self.Tax_status, self.Insurance_status))
+        cursor.commit()
 
     def setup(self):
 
@@ -203,6 +201,7 @@ class fov(arcade.PhysicsEngineSimple):
         #setta alpha a 0 per nascondere i fov delle macchine
         self.sprite.alpha = 0
         pcx, pcy = self.center_calc(self.car)
+        self.queryThis()
         self.sprite.center_x = pcx
         self.sprite.center_y = pcy
 
@@ -287,4 +286,21 @@ class fov(arcade.PhysicsEngineSimple):
 
         return skip_collision
     
-        
+        """        self.Json_car =  {
+                "CarBirthTime":     self.Birth,
+                "IDVehicle" :       self.VehicleID,
+                "Gender":           self.pilot_sex,
+                "Age":              self.true_age,
+                "Name":             self.pilot_name,
+                "Surname":          self.pilot_surname,
+                "Plate":            self.plate,
+                "Region":           self.region,
+                "Model" :           self.car_model,
+                "Displacement" :    self.Displacement,
+                "CarTax" :          self.Tax_status,
+                "Insurance" :       self.Insurance_status,
+                }"""
+
+    """def queryThis(self):
+        cursor.execute("INSERT INTO dbo.Car_Information (CarBirthTime, IDVehicle, Gender, Age, Name, Surname, Plate, Region, Model, Displacement, CarTax, Insurance) VALUES (self.Birth, self.VehicleID, self.pilot_sex, self.true_age, self.pilot_name, self.pilot_surname, self.plate, self.region, self.car_model, self.Displacement, self.Tax_status, self.Insurance_status)")
+        cursor.commit()"""
