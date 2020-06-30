@@ -5,6 +5,7 @@ import numpy
 import random
 from fov import *
 import screen
+import datetime
 
 incidenti = 0
 
@@ -55,6 +56,10 @@ class car(arcade.Sprite):
         self.CAR_MUSIC_VOLUME = 0.1
         self.TIR_MUSIC_VOLUME = 0.1
         self.BIKE_MUSIC_VOLUME = 0.1
+
+    def deathClock(self):
+        self.death_time = datetime.datetime.now()
+        return self.death_time
         
     def draw(self):
         output_draw_time = f"Incidenti: {incidenti}"
@@ -118,7 +123,9 @@ class car(arcade.Sprite):
                             elif self.filename == "../Sprites/Car/bike_1.png" or self.filename == "../Sprites/Car/bike_2.png" or self.filename == "../Sprites/Car/bike_3.png":
                                 car.play_bike_song()
                             self.kill()
+                            self.deathClock()
                             car.kill()
+
                             global incidenti 
                             incidenti += 1
                         break

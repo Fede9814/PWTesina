@@ -7,6 +7,7 @@ import string
 import names
 import numpy
 import json
+import datetime
 
 #LARGHEZZA < 55
 #LUNGHEZZA < L CAR
@@ -73,6 +74,11 @@ class fov(arcade.PhysicsEngineSimple):
         self.B_dist = ((math.pow(self.Speed, 2.0) /
                         (self.fixed_value * self.μ_value)))
         # print("B_dist",self.B_dist)
+
+        #Birth/Life/Death/Synthesis...Jenova is always there for you...
+        self.Birth = datetime.datetime.now()
+        self.Death = car.death_time
+        self.Life = self.Death - self.Birth
 
         #Age correction
         self.true_age = self.age + random.randint(0, 9)
@@ -156,18 +162,21 @@ class fov(arcade.PhysicsEngineSimple):
             self.pilot_name =  names.get_full_name(gender='male')
             self.pilot_surname = names.get_last_name()
 
-        self.Json =  {
-                "IDVehicle" : self.VehicleID,
-                "Gender": self.pilot_sex,
-                "Age": self.true_age,
-                "Name": self.pilot_name,
-                "Surname": self.pilot_surname,
-                "Plate": self.plate,
-                "Region": self.region,
-                "Model" : self.car_model,
-                "Displacement" : self.Displacement,
-                "CarTax" : self.Tax_status,
-                "Insurance" : self.Insurance_status,
+        self.Json_car =  {
+                "CarBirthTime":     self.Birth,
+                "CarDeathTime":     self.Death,
+                "CarLifeSpan":      self.Life ,
+                "IDVehicle" :       self.VehicleID,
+                "Gender":           self.pilot_sex,
+                "Age":              self.true_age,
+                "Name":             self.pilot_name,
+                "Surname":          self.pilot_surname,
+                "Plate":            self.plate,
+                "Region":           self.region,
+                "Model" :           self.car_model,
+                "Displacement" :    self.Displacement,
+                "CarTax" :          self.Tax_status,
+                "Insurance" :       self.Insurance_status,
                 }
 
     def setup(self):
