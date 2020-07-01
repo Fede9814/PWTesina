@@ -1,1 +1,0 @@
-arcade.draw_text("Simple line of text in 12 point", start_x, start_y, arcade.color.BLACK, 
