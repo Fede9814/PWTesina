@@ -181,7 +181,7 @@ class fov(arcade.PhysicsEngineSimple):
 
         fov_list = []
 
-        hitbox1 = "../Sprites/Hitbox/Hitbox_L70_W30.png"
+        """hitbox1 = "../Sprites/Hitbox/Hitbox_L70_W30.png"
         hitbox2 = "../Sprites/Hitbox/Hitbox_L80_W30.png"
         hitbox3 = "../Sprites/Hitbox/Hitbox_L100_W30.png"
         hitbox4 = "../Sprites/Hitbox/Hitbox_L120_W30.png"
@@ -192,8 +192,27 @@ class fov(arcade.PhysicsEngineSimple):
         fov_list.append(hitbox3)
         fov_list.append(hitbox4)
         fov_list.append(hitbox5)
+        """
 
-        hitbox_fov = numpy.random.choice(fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
+        if self.R_dist < 3.50:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L70_W30.png"
+            fov_list.append(hitbox_fov)
+
+        elif self.R_dist > 3.51 and self.R_dist < 6.0:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L80_W30.png"
+            fov_list.append(hitbox_fov)
+
+        elif self.R_dist > 6.1 and self.R_dist < 9.5:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L120_W30.png"
+            fov_list.append(hitbox_fov)
+        
+        elif self.R_dist > 9.6 and self.R_dist < 10.5:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L140_W30.png"
+            fov_list.append(hitbox_fov)
+        
+        elif self.R_dist > 10.6:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L100_W30.png"
+            fov_list.append(hitbox_fov)
 
         #setta alpha a 0 per nascondere i fov delle macchine
         #self.hitbox.alpha = 255
