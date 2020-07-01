@@ -9,38 +9,128 @@ class cube():
         self.center_y = center_y
         self.val = val
         self.next_step()
+        self.stop_status = False
 
     def recognition(self, pos_x, pos_y):
         cube = None
         if(self.val == 0):
-            cube = arcade.load_texture("../Concept Art/Blocks/bound.png")
+            cube = arcade.load_texture("../Sprites/Grass/grass1.png")
             cube.draw_scaled(self.center_x, self.center_y)
-        if(self.val == 1):
-            cube = arcade.load_texture("../Concept Art/Blocks/start.png")
+        elif(self.val == 1):
+            cube = arcade.load_texture("../Sprites/Road_blocks/start.png")
             cube.draw_scaled(self.center_x, self.center_y)
-        if(self.val == 2):
-            cube = arcade.load_texture("../Concept Art/Blocks/end.png")
+        elif(self.val == 2):
+            cube = arcade.load_texture("../Sprites/Road_blocks/end.png")
             cube.draw_scaled(self.center_x, self.center_y)
-        if(self.val == 3):
-            if(self.sens == "in"):
+        
+        #STRADE
+        elif(self.val == 3):
+            #STRADA NORD#
+            if(self.pos == "nord"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road1_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road2_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road3_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road4_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+            #STRADA SUD#
+            if(self.pos == "sud"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road3_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road4_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road1_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road2_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y, angle=90)
+            #STRADA OVEST#
+            if(self.pos == "ovest"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road2_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road1_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road4_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road3_new.png", mirrored=True)
+                        cube.draw_scaled(self.center_x, self.center_y)
+            #STRADA EST#
+            if(self.pos == "est"):
+                if(self.sens == "in"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road1_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road2_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+                if(self.sens == "out"):
+                    if(self.cors == "left"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road3_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.cors == "right"):
+                        cube = arcade.load_texture("../Sprites/Road_blocks/road4_new.png")
+                        cube.draw_scaled(self.center_x, self.center_y)
+
+        #SEMAFORI
+        elif(self.val == 4):
+            #STOP NORD#
+            if(self.pos == "nord"):
                 if(self.cors == "left"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road1.png")
+                    cube = arcade.load_texture("../Sprites/Road_blocks/left.png")
+                    cube.draw_scaled(self.center_x, self.center_y, angle=180)
+                if(self.cors == "right"):
+                    cube = arcade.load_texture("../Sprites/Road_blocks/right.png")
+                    cube.draw_scaled(self.center_x, self.center_y, angle=180)
+                        
+            #STOP SUD#
+            if(self.pos == "sud"):
+                if(self.cors == "left"):
+                    cube = arcade.load_texture("../Sprites/Road_blocks/left.png")
                     cube.draw_scaled(self.center_x, self.center_y)
                 if(self.cors == "right"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road2.png")
+                    cube = arcade.load_texture("../Sprites/Road_blocks/right.png")
                     cube.draw_scaled(self.center_x, self.center_y)
-            if(self.sens == "out"):
+
+            #STOP OVEST#
+            if(self.pos == "ovest"):
                 if(self.cors == "left"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road3.png")
-                    cube.draw_scaled(self.center_x, self.center_y)
+                    cube = arcade.load_texture("../Sprites/Road_blocks/left.png")
+                    cube.draw_scaled(self.center_x, self.center_y, angle=270)
                 if(self.cors == "right"):
-                    cube = arcade.load_texture("../Concept Art/Blocks/road4.png")
-                    cube.draw_scaled(self.center_x, self.center_y)
-        if(self.val == 4):
-            cube = arcade.load_texture("../Concept Art/Blocks/stop.png")
-            cube.draw_scaled(self.center_x, self.center_y)
-        if(self.val == 5):
-            cube = arcade.load_texture("../Concept Art/Blocks/road.png")
+                    cube = arcade.load_texture("../Sprites/Road_blocks/right.png")
+                    cube.draw_scaled(self.center_x, self.center_y, angle=270)
+
+            #STOP EST#
+            if(self.pos == "est"):
+                if(self.cors == "left"):
+                    cube = arcade.load_texture("../Sprites/Road_blocks/left.png")
+                    cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                if(self.cors == "right"):
+                    cube = arcade.load_texture("../Sprites/Road_blocks/right.png")
+                    cube.draw_scaled(self.center_x, self.center_y, angle=90)
+
+
+        elif(self.val == 5):
+            cube = arcade.load_texture("../Sprites/Road_blocks/road_new.png")
             cube.draw_scaled(self.center_x, self.center_y)
         self.cube = cube
     
@@ -145,4 +235,16 @@ class cube():
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y
                     break
+                if(j[2] == "semaforo"):
+                    self.stop_ord = j[6]
+                    break
+    
+    def change_status(self, current_status):
+        token = current_status
+        if(current_status == self.stop_ord):
+            self.stop_status = True
+        else:
+            self.stop_status = False
 
+
+            
