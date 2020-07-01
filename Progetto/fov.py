@@ -77,11 +77,6 @@ class fov(arcade.PhysicsEngineSimple):
                             self.reaction_time)/(3.6 - self.skill_factor))
         #print("R_dist", self.R_dist)
 
-        self.B_dist = ((math.pow(self.Speed, 2.0) /
-                        (self.fixed_value * self.μ_value)))
-        # print("B_dist",self.B_dist)
-
-
         #Database info related stuff
         #Birth/Life/Death/Synthesis...Jenova is always there for you...
         self.Birth = datetime.datetime.now()
