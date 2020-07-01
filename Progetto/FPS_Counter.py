@@ -2,6 +2,7 @@ import time
 import collections
 
 class FPSCounter:
+    
     def __init__(self):
         self.time = time.perf_counter()
         self.frame_times = collections.deque(maxlen=60)

@@ -1,11 +1,22 @@
+import pyodbc
 import arcade
 import math
 import os
 import numpy
 import random
+import string
+import names
+import numpy
+import json
+import datetime
+from car import *
 
-#LARGHEZZA < 55
-#LUNGHEZZA < L CAR
+conn = pyodbc.connect('Driver={SQL Server};'
+                        'Server=DESKTOP-7PATCN6\SQL;'
+                        'Database=test;'
+                        'Trusted_Connection=yes;')
+
+cursor = conn.cursor()
 
 class fov(arcade.PhysicsEngineSimple):
     def __init__(self, center_x, center_y, angle, car):
@@ -66,16 +77,106 @@ class fov(arcade.PhysicsEngineSimple):
                             self.reaction_time)/(3.6 - self.skill_factor))
         #print("R_dist", self.R_dist)
 
-        self.B_dist = ((math.pow(self.Speed, 2.0) /
-                        (self.fixed_value * self.μ_value)))
-        # print("B_dist",self.B_dist)
+        #Database info related stuff
+        #Birth/Life/Death/Synthesis...Jenova is always there for you...
+        self.Birth = datetime.datetime.now()
 
-    
+        #Age correction
+        self.true_age = int(self.age + random.randint(0, 9))
+
+        #VehicleID
+        self.ID_Chars = []
+        self.IDChars = string.ascii_uppercase
+        self.ID_Numbers = str(random.randint(1000, 9999))
+        self.IDChar = random.choice(self.IDChars)
+        self.ID_Chars.append(self.IDChar)
+        self.ID_Chars.append(self.ID_Numbers)
+        self.IDVehicle = str(''.join(self.ID_Chars))
+
+        car_model_list = ["Peugeot-Citroen",
+            "Suzuki",
+            "FCA",
+            "Honda",
+            "Ford",
+            "Hyundai-Kia",
+            "General Motors",
+            "Renault-Nissan",
+            "Toyota",
+            "VW Group"]
+
+        self.car_model = numpy.random.choice(car_model_list, p = 
+            [0.03, 0.03, 0.05, 0.06, 0.08, 0.12, 0.12, 0.15, 0.15, 0.21])
+        
+        Displacement_list = ["1200", "1300", "1400", "1600", "2000"]
+        self.Displacement = random.choice(Displacement_list)
+
+        Tax_status_list = ["Paid", "Unpaid"]
+        self.Tax_status = numpy.random.choice(Tax_status_list, p = [0.95, 0.05])
+
+        Insurance_status_list = ["Paid", "Unpaid"]
+        self.Insurance_status = numpy.random.choice(Insurance_status_list, p = [0.95, 0.05])
+
+        #Plate info
+        self.plate_chars = []
+        self.Chars = string.ascii_uppercase
+        self.middle_numbers = str(random.randint(100, 999))
+        self.CharI = random.choice(self.Chars)
+        self.plate_chars.append(self.CharI)
+        self.CharII = random.choice(self.Chars)
+        self.plate_chars.append(self.CharII)
+        self.plate_chars.append(self.middle_numbers)
+        self.CharIII = random.choice(self.Chars)
+        self.plate_chars.append(self.CharIII)
+        self.CharIV = random.choice(self.Chars)
+        self.plate_chars.append(self.CharIV)
+
+        self.plate = ''.join(self.plate_chars)
+
+        #Region initials
+        region_list = [
+            "AL","AN","AO","AQ","AR","AP",
+            "AT","AV","BA","BT","BL","BN",
+            "BG","BI","BO","BZ","BS","BR",
+            "CA","CL","CB","CI","CE","CT",
+            "CZ","CH","CO","CS","CR","KR",
+            "CN","EN","FM","FE","FI","FG",
+            "FC","FR","GE","GO","GR","IM",
+            "IS","SP","LT","LE","LC","LI",
+            "LO","LU","MC","MN","MS","MT",
+            "VS","ME","MI","MO","MB","NA",
+            "NO","NU","OG","OT","OR","PD",
+            "PA","PR","PV","PG","PU","PE",
+            "PC","PI","PT","PN","PZ","PO",
+            "RG","RA","RC","RE","RI","RN",
+            "RO","SA","SS","SV","SI","SR",
+            "SO","TA","TE","TR","TO","TP",
+            "TN","TV","TS","UD","VA","VE",
+            "VB","VC","VR","VV","VI","VT"
+            ]
+
+        self.region = random.choice(region_list)
+
+        gender = [0, 1]
+        self.gender_picker = numpy.random.choice(gender, p = [0.54, 0.46])
+        if self.gender_picker == 0:
+            self.pilot_sex = "F"
+            self.pilot_name = names.get_first_name(gender='female')
+            self.pilot_surname = names.get_last_name()
+        elif self.gender_picker == 1:
+            self.pilot_sex = "M"
+            self.pilot_name =  names.get_full_name(gender='male')
+            self.pilot_surname = names.get_last_name()
+
+    def queryThis(self):
+        self.cursor = cursor
+        self.cursor.execute("INSERT INTO dbo.Car_Information (CarBirthTime, IDVehicle, Gender, Age, Name, Surname, Plate, Region, Model, Displacement, CarTax, Insurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (self.Birth, self.IDVehicle, self.pilot_sex, self.true_age, self.pilot_name, self.pilot_surname, self.plate, self.region, self.car_model, self.Displacement, self.Tax_status, self.Insurance_status))
+        cursor.commit()
+
     def setup(self):
 
         fov_list = []
 
-        hitbox1 = "../Sprites/Hitbox/Hitbox_L70_W30.png"
+        """hitbox1 = "../Sprites/Hitbox/Hitbox_L70_W30.png"
         hitbox2 = "../Sprites/Hitbox/Hitbox_L80_W30.png"
         hitbox3 = "../Sprites/Hitbox/Hitbox_L100_W30.png"
         hitbox4 = "../Sprites/Hitbox/Hitbox_L120_W30.png"
@@ -86,8 +187,27 @@ class fov(arcade.PhysicsEngineSimple):
         fov_list.append(hitbox3)
         fov_list.append(hitbox4)
         fov_list.append(hitbox5)
+        """
 
-        hitbox_fov = numpy.random.choice(fov_list, p = [0.7795, 0.1679, 0.0479, 0.0032, 0.0015])
+        if self.R_dist < 3.10:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L70_W30.png"
+            fov_list.append(hitbox_fov)
+
+        elif self.R_dist > 3.11 and self.R_dist < 5.6:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L80_W30.png"
+            fov_list.append(hitbox_fov)
+
+        elif self.R_dist > 5.7 and self.R_dist < 8.7:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L120_W30.png"
+            fov_list.append(hitbox_fov)
+        
+        elif self.R_dist > 8.8 and self.R_dist < 9.8:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L140_W30.png"
+            fov_list.append(hitbox_fov)
+        
+        elif self.R_dist > 9.9:
+            hitbox_fov = "../Sprites/Hitbox/Hitbox_L100_W30.png"
+            fov_list.append(hitbox_fov)
 
         #setta alpha a 0 per nascondere i fov delle macchine
         #self.hitbox.alpha = 255
@@ -95,6 +215,7 @@ class fov(arcade.PhysicsEngineSimple):
         #setta alpha a 0 per nascondere i fov delle macchine
         self.sprite.alpha = 0
         pcx, pcy = self.center_calc(self.car)
+        self.queryThis()
         self.sprite.center_x = pcx
         self.sprite.center_y = pcy
 
@@ -179,4 +300,18 @@ class fov(arcade.PhysicsEngineSimple):
 
         return skip_collision
     
-        
+"""        self.Json_car =  {
+                "CarBirthTime":     self.Birth,
+                "IDVehicle" :       self.VehicleID,
+                "Gender":           self.pilot_sex,
+                "Age":              self.true_age,
+                "Name":             self.pilot_name,
+                "Surname":          self.pilot_surname,
+                "Plate":            self.plate,
+                "Region":           self.region,
+                "Model" :           self.car_model,
+                "Displacement" :    self.Displacement,
+                "CarTax" :          self.Tax_status,
+                "Insurance" :       self.Insurance_status,
+                }
+"""

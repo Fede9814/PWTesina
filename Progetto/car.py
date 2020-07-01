@@ -3,10 +3,11 @@ import math
 import os
 import numpy
 import random
+import Screen
 from fov import *
+import datetime
 
 incidenti = 0
-
 
 imagelist = [
     "../Sprites/Car/car_1.png",
@@ -33,8 +34,6 @@ class car(arcade.Sprite):
         self.my_cube = None
         self.in_transit = False
         self.stop_cube = None
-        #max speed = 330, after that it explodes.
-        #reasonable range: 150 < v < 300
         self.initial_speed_range = [210, 240, 270, 300, 330]
         self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.2, 0.2, 0.2, 0.2, 0.2])
         self.speed = self.initial_speed
@@ -54,7 +53,7 @@ class car(arcade.Sprite):
         self.CAR_MUSIC_VOLUME = 0.1
         self.TIR_MUSIC_VOLUME = 0.1
         self.BIKE_MUSIC_VOLUME = 0.1
-        
+
     def draw(self):
         output_draw_time = f"Incidenti: {incidenti}"
         arcade.draw_text(output_draw_time, 300, 930, arcade.color.BLACK, 25)
@@ -118,6 +117,7 @@ class car(arcade.Sprite):
                                 car.play_bike_song()
                             self.kill()
                             car.kill()
+
                             global incidenti 
                             incidenti += 1
                         break
@@ -127,7 +127,7 @@ class car(arcade.Sprite):
                 in_range = False
             return in_range
     
-    def update(self, delta_time=0.50): 
+    def update(self, delta_time=0.50):
         
         start_x = self.center_x
         start_y = self.center_y
@@ -157,7 +157,6 @@ class car(arcade.Sprite):
         
         x_diff = dest_x - start_x
         y_diff = dest_y - start_y
-        angle = math.atan2(y_diff, x_diff)
 
         self.check_speed = self.fov.check_distance(self.car_list)
         if(self.check_speed != True):
