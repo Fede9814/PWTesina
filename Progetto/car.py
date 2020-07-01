@@ -4,7 +4,6 @@ import os
 import numpy
 import random
 from fov import *
-import screen
 
 incidenti = 0
 
