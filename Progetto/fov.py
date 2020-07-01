@@ -18,7 +18,6 @@ conn = pyodbc.connect('Driver={SQL Server};'
 
 cursor = conn.cursor()
 
-
 class fov(arcade.PhysicsEngineSimple):
     def __init__(self, center_x, center_y, angle, car):
 
@@ -83,6 +82,7 @@ class fov(arcade.PhysicsEngineSimple):
         # print("B_dist",self.B_dist)
 
 
+        #Database info related stuff
         #Birth/Life/Death/Synthesis...Jenova is always there for you...
         self.Birth = datetime.datetime.now()
 
@@ -286,7 +286,7 @@ class fov(arcade.PhysicsEngineSimple):
 
         return skip_collision
     
-        """        self.Json_car =  {
+"""        self.Json_car =  {
                 "CarBirthTime":     self.Birth,
                 "IDVehicle" :       self.VehicleID,
                 "Gender":           self.pilot_sex,
@@ -299,8 +299,5 @@ class fov(arcade.PhysicsEngineSimple):
                 "Displacement" :    self.Displacement,
                 "CarTax" :          self.Tax_status,
                 "Insurance" :       self.Insurance_status,
-                }"""
-
-    """def queryThis(self):
-        cursor.execute("INSERT INTO dbo.Car_Information (CarBirthTime, IDVehicle, Gender, Age, Name, Surname, Plate, Region, Model, Displacement, CarTax, Insurance) VALUES (self.Birth, self.VehicleID, self.pilot_sex, self.true_age, self.pilot_name, self.pilot_surname, self.plate, self.region, self.car_model, self.Displacement, self.Tax_status, self.Insurance_status)")
-        cursor.commit()"""
+                }
+"""

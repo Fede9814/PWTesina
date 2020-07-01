@@ -53,7 +53,7 @@ class car(arcade.Sprite):
         self.CAR_MUSIC_VOLUME = 0.1
         self.TIR_MUSIC_VOLUME = 0.1
         self.BIKE_MUSIC_VOLUME = 0.1
-        
+
     def draw(self):
         output_draw_time = f"Incidenti: {incidenti}"
         arcade.draw_text(output_draw_time, 300, 930, arcade.color.BLACK, 25)

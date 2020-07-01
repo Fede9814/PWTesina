@@ -1,5 +1,4 @@
 import arcade
-import path
 import random
 
 boundaries = 0
