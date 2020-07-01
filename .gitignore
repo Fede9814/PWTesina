@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Progetto/stress_test_collision_arcade_spatial.csv
