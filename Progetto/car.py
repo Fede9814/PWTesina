@@ -3,11 +3,18 @@ import math
 import os
 import numpy
 import random
-import Screen
+import screen
 from fov import *
 import datetime
 
 incidenti = 0
+
+server = 'databasetesina.c8xvln9jnfss.eu-west-1.rds.amazonaws.com' 
+database = 'db_tesina' 
+username = 'admin' 
+password = 'password' 
+conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+cursor = conn.cursor()
 
 imagelist = [
     "../Sprites/Car/car_1.png",
@@ -68,6 +75,145 @@ class car(arcade.Sprite):
         self.car_music_list = ["../Sound/1_crash.wav"]
         self.tir_music_list = ["../Sound/2_splat.wav"]
         self.bike_music_list = ["../Sound/3_burn.wav"]
+        self.db_info()
+        self.queryThis()
+        self.timer_start = datetime.datetime.now().replace(microsecond=0)
+
+    def time_service (self, hour, minute, second):
+        self.start_time = str(hour) + ":" + str(minute) + ":" + str(second)
+        self.hour = hour
+        self.end_time = None
+        self.timer_second = 0
+        self.timer_second_sup = 0
+        self.timer_minute = 0
+        self.timer_string_min = "00"
+        self.timer_string_sec = "00"
+
+    def db_info(self):
+        self.car_information = []
+
+        #VehicleID
+        ID_Chars = []
+        IDChars = string.ascii_uppercase
+        ID_Numbers = str(random.randint(1000, 9999))
+        IDChar = random.choice(IDChars)
+        ID_Chars.append(IDChar)
+        ID_Chars.append(ID_Numbers)
+        IDVehicle = str(''.join(ID_Chars))
+        self.car_information.append(IDVehicle)
+
+        #PLATE
+        plate_chars = []
+        Chars = string.ascii_uppercase
+        middle_numbers = str(random.randint(100, 999))
+        CharI = random.choice(Chars)
+        plate_chars.append(CharI)
+        CharII = random.choice(Chars)
+        plate_chars.append(CharII)
+        plate_chars.append(middle_numbers)
+        CharIII = random.choice(Chars)
+        plate_chars.append(CharIII)
+        CharIV = random.choice(Chars)
+        plate_chars.append(CharIV)
+
+        plate = ''.join(plate_chars)
+        self.car_information.append(plate)
+
+        #AGE
+        true_age = int(self.fov.age + random.randint(0, 9))
+
+        #GENDER - NAME - SURNAME
+        gender = [0, 1]
+        gender_picker = numpy.random.choice(gender, p = [0.54, 0.46])
+        if gender_picker == 0:
+            pilot_sex = "F"
+            pilot_name = names.get_first_name(gender='female')
+            pilot_surname = names.get_last_name()
+        else:
+            pilot_sex = "M"
+            pilot_name =  names.get_full_name(gender='male')
+            pilot_surname = names.get_last_name()
+
+        self.car_information.append(pilot_sex)
+        self.car_information.append(true_age)
+        self.car_information.append(pilot_name)
+        self.car_information.append(pilot_surname)
+
+        #REGION
+        region_list = [
+            "AL","AN","AO","AQ","AR","AP",
+            "AT","AV","BA","BT","BL","BN",
+            "BG","BI","BO","BZ","BS","BR",
+            "CA","CL","CB","CI","CE","CT",
+            "CZ","CH","CO","CS","CR","KR",
+            "CN","EN","FM","FE","FI","FG",
+            "FC","FR","GE","GO","GR","IM",
+            "IS","SP","LT","LE","LC","LI",
+            "LO","LU","MC","MN","MS","MT",
+            "VS","ME","MI","MO","MB","NA",
+            "NO","NU","OG","OT","OR","PD",
+            "PA","PR","PV","PG","PU","PE",
+            "PC","PI","PT","PN","PZ","PO",
+            "RG","RA","RC","RE","RI","RN",
+            "RO","SA","SS","SV","SI","SR",
+            "SO","TA","TE","TR","TO","TP",
+            "TN","TV","TS","UD","VA","VE",
+            "VB","VC","VR","VV","VI","VT"
+            ]
+
+        region = random.choice(region_list)
+        self.car_information.append(region)
+
+        #CAR MODEL
+        car_model_list = ["Peugeot-Citroen",
+            "Suzuki",
+            "FCA",
+            "Honda",
+            "Ford",
+            "Hyundai-Kia",
+            "General Motors",
+            "Renault-Nissan",
+            "Toyota",
+            "VW Group"]
+        car_model = numpy.random.choice(car_model_list, p = 
+            [0.03, 0.03, 0.05, 0.06, 0.08, 0.12, 0.12, 0.15, 0.15, 0.21])
+        self.car_information.append(car_model)
+
+        #DISPLACEMENT
+        displacement_list = ["1200", "1300", "1400", "1600", "2000"]
+        displacement = random.choice(displacement_list)
+        self.car_information.append(displacement)
+
+        #TAX
+        tax_status_list = ["Paid", "Unpaid"]
+        tax_status = numpy.random.choice(tax_status_list, p = [0.95, 0.05])
+        self.car_information.append(tax_status)
+
+        #INSURANCE
+        insurance_status_list = ["Paid", "Unpaid"]
+        insurance_status = numpy.random.choice(insurance_status_list, p = [0.95, 0.05])
+        self.car_information.append(insurance_status)
+
+
+    def queryThis(self):
+        self.cursor = cursor
+        self.cursor.execute("INSERT INTO dbo.Car_Information (IDVehicle, Plate, Gender, Age, Name, Surname, Region, Model, Displacement, CarTax, Insurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (self.car_information[0], self.car_information[1], self.car_information[2], self.car_information[3], self.car_information[4], self.car_information[5], self.car_information[6], self.car_information[7], self.car_information[8], self.car_information[9], self.car_information[10]))
+        cursor.commit()
+
+    def queryEnd(self, pos, cors):
+        self.cursor = cursor
+        self.cursor.execute("INSERT INTO dbo.Car_Result (Vehicle, StartTime, EndTime, Collision, StartDirection, EndDirection, StartLane, EndLane) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (self.car_information[0], self.start_time, self.end_time, str(self.collision), self.cube_start_pos, pos, self.cube_start_cors, cors))
+        cursor.commit()
+        print(type(self.car_information[0]))
+        print(type(self.start_time))
+        print(type(self.end_time))
+        print(type(self.collision))
+        print(type(self.cube_start_pos))
+        print(type(pos))
+        print(type(self.cube_start_cors))
+        print(type(cors))
+
+
 
     def play_car_song(self):
         self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)
@@ -107,14 +253,16 @@ class car(arcade.Sprite):
                 if(car.telaio != self.telaio):
                     if arcade.check_for_collision(self, car):
                         in_range = True
+                        self.end_time = str(self.hour) + ":" + str(self.timer_minute) + ":" + str(self.timer_second)
                         if(self.frame_count > self.despawn_count):
-                            
                             if self.filename == "../Sprites/Car/car_1.png" or self.filename == "../Sprites/Car/car_2.png" or self.filename == "../Sprites/Car/car_3.png" or self.filename == "../Sprites/Car/car_4.png" or self.filename == "../Sprites/Car/car_5.png":
                                 car.play_car_song()
                             elif self.filename == "../Sprites/Car/TIR_1.png" or self.filename == "../Sprites/Car/TIR_2.png" or self.filename == "../Sprites/Car/TIR_3.png":
                                 car.play_tir_song()
                             elif self.filename == "../Sprites/Car/bike_1.png" or self.filename == "../Sprites/Car/bike_2.png" or self.filename == "../Sprites/Car/bike_3.png":
                                 car.play_bike_song()
+                            self.queryEnd("", "") 
+                            car.queryEnd("", "")
                             self.kill()
                             car.kill()
 
@@ -128,35 +276,33 @@ class car(arcade.Sprite):
             return in_range
     
     def update(self, delta_time=0.50):
+
+        self.timer_now = datetime.datetime.now().replace(microsecond=0)
+        self.timer_result =  self.timer_now - self.timer_start
+
+        if(self.timer_result.seconds != self.timer_second_sup):
+            self.timer_second_sup = self.timer_second_sup + 1
+            self.timer_second = self.timer_second + 1
+            if(self.timer_second <= 9):
+                self.timer_string_sec = "0" + str(self.timer_second)
+            else:
+                self.timer_string_sec = str(self.timer_second)
+        if(self.timer_second == 59):
+            self.timer_second = 0
+            self.timer_minute = self.timer_minute + 1
+            if(self.timer_minute <= 9):
+                self.timer_string_min = "0" + str(self.timer_minute)
+            else:
+                self.timer_string_min = str(self.timer_minute)
         
         start_x = self.center_x
         start_y = self.center_y
 
-        dest_x = None
-        dest_y = None
-        temp_x = None
-        temp_y = None
+        dest_x, dest_y = self.next_move()
 
-        for cube in self.cube_list:
-            if(cube.pos_x <= self.center_x and cube.pos_x + 60 > self.center_x and cube.pos_y <= self.center_y and cube.pos_y + 60 > self.center_y):
-                if(cube.name == "strada" or cube.name == "start"):
-                    temp_x = cube.next_right_x
-                    temp_y = cube.next_right_y
-                else:
-                    temp_x = self.tempdestx
-                    temp_y = self.tempdesty
-                break
-
-        for cube in self.cube_list:
-            if(cube.pos_x == temp_x and cube.pos_y == temp_y):
-                dest_x = cube.center_x
-                dest_y = cube.center_y
-                self.tempdestx = temp_x
-                self.tempdesty = temp_y
-                break
-        
-        x_diff = dest_x - start_x
-        y_diff = dest_y - start_y
+        x_diff = (dest_x + self.base_value_x) - start_x
+        y_diff = (dest_y + self.base_value_y) - start_y
+        angle = math.atan2(y_diff, x_diff)
 
         self.check_speed = self.fov.check_distance(self.car_list)
         if(self.check_speed != True):
@@ -238,7 +384,12 @@ class car(arcade.Sprite):
                 if(cube != self.my_cube):
                     self.my_cube = cube
                     if(self.in_transit == False):
+                        if(cube.name == "start"):
+                            self.cube_start_pos = cube.pos
+                            self.cube_start_cors = cube.cors
                         if(cube.name == "exit"):
+                            self.end_time = str(self.hour) + ":" + str(self.timer_minute) + ":" + str(self.timer_second)
+                            self.queryEnd(cube.pos, cube.cors)
                             self.kill()
                         if(cube.name == "strada" or cube.name == "start"):
                             if(self.probability_change > probability_perc):
