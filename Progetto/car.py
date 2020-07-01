@@ -204,16 +204,6 @@ class car(arcade.Sprite):
         self.cursor = cursor
         self.cursor.execute("INSERT INTO dbo.Car_Result (Vehicle, StartTime, EndTime, Collision, StartDirection, EndDirection, StartLane, EndLane) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (self.car_information[0], self.start_time, self.end_time, str(self.collision), self.cube_start_pos, pos, self.cube_start_cors, cors))
         cursor.commit()
-        print(type(self.car_information[0]))
-        print(type(self.start_time))
-        print(type(self.end_time))
-        print(type(self.collision))
-        print(type(self.cube_start_pos))
-        print(type(pos))
-        print(type(self.cube_start_cors))
-        print(type(cors))
-
-
 
     def play_car_song(self):
         self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)

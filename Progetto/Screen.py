@@ -124,7 +124,7 @@ class window(arcade.Window):
         self.timer_result =  self.timer_now - self.timer_start
 
         if(self.timer_result.seconds != self.timer_second_sup):
-            self.timer_second_sup = self.timer_second_sup + 1
+            self.timer_second_sup = self.timer_result.seconds
             self.timer_second = self.timer_second + 1
             if(self.timer_second <= 9):
                 self.timer_string_sec = "0" + str(self.timer_second)
