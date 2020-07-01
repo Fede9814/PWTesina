@@ -6,4 +6,4 @@ from car import *
 window = window()
 window.setup()
 
-arcade.run()1
+arcade.run()
