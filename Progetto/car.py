@@ -133,10 +133,31 @@ class car(arcade.Sprite):
         start_x = self.center_x
         start_y = self.center_y
 
-        dest_x, dest_y = self.next_move()
+        dest_x = None
+        dest_y = None
+        temp_x = None
+        temp_y = None
 
-        x_diff = (dest_x + self.base_value_x) - start_x
-        y_diff = (dest_y + self.base_value_y) - start_y
+        for cube in self.cube_list:
+            if(cube.pos_x <= self.center_x and cube.pos_x + 60 > self.center_x and cube.pos_y <= self.center_y and cube.pos_y + 60 > self.center_y):
+                if(cube.name == "strada" or cube.name == "start"):
+                    temp_x = cube.next_right_x
+                    temp_y = cube.next_right_y
+                else:
+                    temp_x = self.tempdestx
+                    temp_y = self.tempdesty
+                break
+
+        for cube in self.cube_list:
+            if(cube.pos_x == temp_x and cube.pos_y == temp_y):
+                dest_x = cube.center_x
+                dest_y = cube.center_y
+                self.tempdestx = temp_x
+                self.tempdesty = temp_y
+                break
+        
+        x_diff = dest_x - start_x
+        y_diff = dest_y - start_y
         angle = math.atan2(y_diff, x_diff)
 
         self.check_speed = self.fov.check_distance(self.car_list)

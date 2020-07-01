@@ -149,87 +149,87 @@ class cube():
                                 self.next_left_y = self.pos_y - 60
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y - 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x + 60
                                 self.next_left_y = self.pos_y - 60
                                 self.next_right_x = self.pos_x
                                 self.next_right_y = self.pos_y - 60
-                        elif(self.sens == "out"):
+                        if(self.sens == "out"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x
                                 self.next_left_y = self.pos_y + 60
                                 self.next_right_x = self.pos_x + 60
                                 self.next_right_y = self.pos_y + 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x - 60
                                 self.next_left_y = self.pos_y + 60
                                 self.next_right_x = self.pos_x
                                 self.next_right_y = self.pos_y + 60
-                    elif(self.pos == "sud"):
+                    if(self.pos == "sud"):
                         if(self.sens == "in"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x
                                 self.next_left_y = self.pos_y + 60
                                 self.next_right_x = self.pos_x + 60
                                 self.next_right_y = self.pos_y + 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x - 60
                                 self.next_left_y = self.pos_y + 60
                                 self.next_right_x = self.pos_x
                                 self.next_right_y = self.pos_y + 60
-                        elif(self.sens == "out"):
+                        if(self.sens == "out"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x
                                 self.next_left_y = self.pos_y - 60
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y - 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x + 60
                                 self.next_left_y = self.pos_y - 60
                                 self.next_right_x = self.pos_x
                                 self.next_right_y = self.pos_y - 60
-                    elif(self.pos == "est"):
+                    if(self.pos == "est"):
                         if(self.sens == "in"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x - 60
                                 self.next_left_y = self.pos_y 
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y + 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x - 60
                                 self.next_left_y = self.pos_y - 60
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y
-                        elif(self.sens == "out"):
+                        if(self.sens == "out"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x + 60
                                 self.next_left_y = self.pos_y 
                                 self.next_right_x = self.pos_x + 60
                                 self.next_right_y = self.pos_y - 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x + 60
                                 self.next_left_y = self.pos_y + 60
                                 self.next_right_x = self.pos_x + 60
                                 self.next_right_y = self.pos_y
-                    elif(self.pos == "ovest"):
+                    if(self.pos == "ovest"):
                         if(self.sens == "in"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x + 60
                                 self.next_left_y = self.pos_y 
                                 self.next_right_x = self.pos_x + 60
                                 self.next_right_y = self.pos_y - 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x + 60
                                 self.next_left_y = self.pos_y + 60
                                 self.next_right_x = self.pos_x + 60
                                 self.next_right_y = self.pos_y
-                        elif(self.sens == "out"):
+                        if(self.sens == "out"):
                             if(self.cors == "left"):
                                 self.next_left_x = self.pos_x - 60
                                 self.next_left_y = self.pos_y 
                                 self.next_right_x = self.pos_x - 60
                                 self.next_right_y = self.pos_y + 60
-                            elif(self.cors == "right"):
+                            if(self.cors == "right"):
                                 self.next_left_x = self.pos_x - 60
                                 self.next_left_y = self.pos_y - 60
                                 self.next_right_x = self.pos_x - 60
