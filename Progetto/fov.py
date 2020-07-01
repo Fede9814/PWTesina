@@ -189,23 +189,23 @@ class fov(arcade.PhysicsEngineSimple):
         fov_list.append(hitbox5)
         """
 
-        if self.R_dist < 3.50:
+        if self.R_dist < 3.10:
             hitbox_fov = "../Sprites/Hitbox/Hitbox_L70_W30.png"
             fov_list.append(hitbox_fov)
 
-        elif self.R_dist > 3.51 and self.R_dist < 6.0:
+        elif self.R_dist > 3.11 and self.R_dist < 5.6:
             hitbox_fov = "../Sprites/Hitbox/Hitbox_L80_W30.png"
             fov_list.append(hitbox_fov)
 
-        elif self.R_dist > 6.1 and self.R_dist < 9.5:
+        elif self.R_dist > 5.7 and self.R_dist < 8.7:
             hitbox_fov = "../Sprites/Hitbox/Hitbox_L120_W30.png"
             fov_list.append(hitbox_fov)
         
-        elif self.R_dist > 9.6 and self.R_dist < 10.5:
+        elif self.R_dist > 8.8 and self.R_dist < 9.8:
             hitbox_fov = "../Sprites/Hitbox/Hitbox_L140_W30.png"
             fov_list.append(hitbox_fov)
         
-        elif self.R_dist > 10.6:
+        elif self.R_dist > 9.9:
             hitbox_fov = "../Sprites/Hitbox/Hitbox_L100_W30.png"
             fov_list.append(hitbox_fov)
 
