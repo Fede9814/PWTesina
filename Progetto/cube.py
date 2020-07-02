@@ -41,6 +41,7 @@ class cube():
                     if(self.cors == "right"):
                         cube = arcade.load_texture("../Sprites/Road_blocks/road4_new.png")
                         cube.draw_scaled(self.center_x, self.center_y, angle=90)
+
             #STRADA SUD#
             if(self.pos == "sud"):
                 if(self.sens == "in"):
@@ -132,8 +133,23 @@ class cube():
         elif(self.val == 5):
             cube = arcade.load_texture("../Sprites/Road_blocks/road_new.png")
             cube.draw_scaled(self.center_x, self.center_y)
+        
+        #LUCI#
+        elif(self.val == 6):
+            if(self.pos == "nord"):
+                cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                cube.draw_scaled(self.center_x, self.center_y, angle=180)
+            if(self.pos == "sud"):
+                cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                cube.draw_scaled(self.center_x, self.center_y)
+            if(self.pos == "est"):
+                cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                cube.draw_scaled(self.center_x, self.center_y, angle=90)
+            if(self.pos == "ovest"):
+                cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                cube.draw_scaled(self.center_x, self.center_y, angle=270)
         self.cube = cube
-    
+        
     def next_step(self):
         for j in points:
             if(j[0] == self.pos_x and j[1] == self.pos_y):
@@ -141,6 +157,10 @@ class cube():
                 self.pos = j[3]
                 self.cors = j[4]
                 self.sens = j[5]
+                if(j[2] == "semaforo" and j[4] == "Null"):
+                    self.light = True
+                elif(j[2] == "semaforo" and j[4] != "Null"):
+                    self.light = False
                 if(j[2] == "strada" or j[2] == "start"):
                     if(self.pos == "nord"):
                         if(self.sens == "in"):
@@ -242,9 +262,39 @@ class cube():
     def change_status(self, current_status):
         token = current_status
         if(current_status == self.stop_ord):
-            self.stop_status = True
-        else:
-            self.stop_status = False
+            if(self.stop_status == True):
+                if(self.light == True):
+                    if(self.pos == "nord"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Green.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y, angle=180)
+                    if(self.pos == "sud"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Green.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.pos == "est"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Green.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.pos == "ovest"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Green.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y, angle=270)
+
+            elif(self.stop_status == False):
+                if(self.light == True):
+                    if(self.pos == "nord"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y, angle=180)
+                    if(self.pos == "sud"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y)
+                    if(self.pos == "est"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y, angle=90)
+                    if(self.pos == "ovest"):
+                        self.cube = arcade.load_texture("../Sprites/Lights/Red.png")
+                        self.cube.draw_scaled(self.center_x, self.center_y, angle=270)
 
 
-            
+
+
+
+
+

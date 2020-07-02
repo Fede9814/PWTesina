@@ -167,7 +167,7 @@ class window(arcade.Window):
                 else:
                     self.current_status = 1
                 for cube in self.cube_list:
-                    if(cube.val == 4):
+                    if(cube.val == 4 or cube.val == 6):
                         cube.change_status(self.current_status)
             else:
                 self.yellow_count += 1

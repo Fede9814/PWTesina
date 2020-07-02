@@ -4,7 +4,7 @@ import os
 import numpy
 import random
 import screen
-from fov import *
+from Fov import *
 import datetime
 
 incidenti = 0
