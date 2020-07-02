@@ -7,6 +7,7 @@ from car import *
 from map import *
 from cube import *
 from FPS_Counter import *
+from timeit import default_timer as timer
 
 USE_SPATIAL_HASHING = True
 if USE_SPATIAL_HASHING:
@@ -28,11 +29,20 @@ class window(arcade.Window):
         self.yellow_time = 30
         self.red_time = 200
         self.global_spawn = 0
+        self.hour = 0
+        self.timer_start = None
+        self.timer_now = None
+        self.timer_result = None
+        self.timer_second = 0
+        self.timer_second_sup = 0
+        self.timer_minute = 0
+        self.timer_string_min = "00"
+        self.timer_string_sec = "00"
 
         self.background_music_list = []
         self.current_background_song = 0
         self.music = None
-        self.BACKGROUND_MUSIC_VOLUME = 0.1
+        self.BACKGROUND_MUSIC_VOLUME = 0
 
         self.results_file = open(RESULTS_FILE, "w")
 
@@ -55,9 +65,12 @@ class window(arcade.Window):
       
         self.car_list = arcade.SpriteList()
 
-        auto1 = car()
-        auto1.setup(self.cube_list, self.car_list)
-        self.car_list.append(auto1)
+        auto = car()
+        auto.setup(self.cube_list, self.car_list)
+        auto.time_service(self.hour, self.timer_minute, self.timer_second)
+        self.car_list.append(auto)
+        
+        self.timer_start = datetime.datetime.now().replace(microsecond=0)
 
     def on_draw(self):       
         arcade.start_render()
@@ -84,6 +97,10 @@ class window(arcade.Window):
 
         output_draw_time = f"Frame Count: {self.global_spawn}"
         arcade.draw_text(output_draw_time, 300, 960, arcade.color.BLACK, 25)
+
+        output_draw_time = f"Cronometro: {self.hour}:{self.timer_string_min}:{self.timer_string_sec}"
+        arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
+
 
         if(self.current_status == 1 and self.yellow_start == False):
             cube = arcade.load_texture("../Sprites/Lights/Green.png")
@@ -131,6 +148,26 @@ class window(arcade.Window):
             self.current_background_song = 0
 
     def on_update(self, delta_time=0.50):
+
+
+        self.timer_now = datetime.datetime.now().replace(microsecond=0)
+        self.timer_result =  self.timer_now - self.timer_start
+
+        if(self.timer_result.seconds != self.timer_second_sup):
+            self.timer_second_sup = self.timer_result.seconds
+            self.timer_second = self.timer_second + 1
+            if(self.timer_second <= 9):
+                self.timer_string_sec = "0" + str(self.timer_second)
+            else:
+                self.timer_string_sec = str(self.timer_second)
+        if(self.timer_second == 59):
+            self.timer_second = 0
+            self.timer_minute = self.timer_minute + 1
+            if(self.timer_minute <= 9):
+                self.timer_string_min = "0" + str(self.timer_minute)
+            else:
+                self.timer_string_min = str(self.timer_minute)
+
         self.global_spawn += 1
         background_music_looper = self.background_music.get_stream_position()
         if background_music_looper == 0.0:
@@ -171,9 +208,12 @@ class window(arcade.Window):
             self.spawn_car()
             
     def spawn_car(self):
-        auto1 = car()
-        auto1.setup(self.cube_list, self.car_list)
-        self.car_list.append(auto1)
+        auto = car()
+        auto.setup(self.cube_list, self.car_list)
+        auto.time_service(self.hour, self.timer_minute, self.timer_second)
+        self.car_list.append(auto)
+
+
         
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F:
@@ -197,16 +237,37 @@ class window(arcade.Window):
                 self.change = 1   
 
         if key == arcade.key.KEY_1:
-            auto1 = car()
-            auto1.setup(self.cube_list, self.car_list)
-            self.car_list.append(auto1)
+            auto = car()
+            auto.setup(self.cube_list, self.car_list)
+            auto.time_service(self.hour, self.timer_minute, self.timer_second)
+            self.car_list.append(auto)
 
         if key == arcade.key.P:
             auto = car()
             auto.ignore = True
             auto.speed = 500
             auto.setup(self.cube_list, self.car_list)
+            auto.time_service(self.hour, self.timer_minute, self.timer_second)
             self.car_list.append(auto)
+
+        if key == arcade.key.UP:
+            if(self.hour < 23):
+                self.hour = self.hour + 1
+                self.timer_start = datetime.datetime.now().replace(microsecond=0)
+                self.timer_second = 0
+                self.timer_minute = 0
+                self.timer_string_min = "00"
+                self.timer_string_sec = "00"
+
+        if key == arcade.key.DOWN:
+            if(self.hour > 0):
+                self.hour = self.hour - 1
+                self.timer_start = datetime.datetime.now().replace(microsecond=0)
+                self.timer_second = 0
+                self.timer_minute = 0
+                self.timer_string_min = "00"
+                self.timer_string_sec = "00"
+            
 
     def set_update_rate(self, rate: float):
 
