@@ -11,12 +11,12 @@ import json
 import datetime
 from car import *
 
-conn = pyodbc.connect('Driver={SQL Server};'
-                        'Server=DESKTOP-7PATCN6\SQL;'
-                        'Database=test;'
-                        'Trusted_Connection=yes;')
-
-cursor = conn.cursor()
+#conn = pyodbc.connect('Driver={SQL Server};'
+#                        'Server=DESKTOP-7PATCN6\SQL;'
+#                        'Database=test;'
+#                        'Trusted_Connection=yes;')
+#
+#cursor = conn.cursor()
 
 class fov(arcade.PhysicsEngineSimple):
     def __init__(self, center_x, center_y, angle, car):

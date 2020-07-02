@@ -3,7 +3,7 @@ import math
 import os
 import numpy
 import random
-import Screen
+import screen
 from fov import *
 import datetime
 
@@ -34,7 +34,7 @@ class car(arcade.Sprite):
         self.my_cube = None
         self.in_transit = False
         self.stop_cube = None
-        self.initial_speed_range = [210, 240, 270, 300, 330]
+        self.initial_speed_range = [180, 210, 240, 270, 300]
         self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.2, 0.2, 0.2, 0.2, 0.2])
         self.speed = self.initial_speed
         self.base_value_x = 0
@@ -132,28 +132,12 @@ class car(arcade.Sprite):
         start_x = self.center_x
         start_y = self.center_y
 
-        dest_x = None
-        dest_y = None
-        temp_x = None
-        temp_y = None
+        dest_x, dest_y = self.next_move()
 
-        for cube in self.cube_list:
-            if(cube.pos_x <= self.center_x and cube.pos_x + 60 > self.center_x and cube.pos_y <= self.center_y and cube.pos_y + 60 > self.center_y):
-                if(cube.name == "strada" or cube.name == "start"):
-                    temp_x = cube.next_right_x
-                    temp_y = cube.next_right_y
-                else:
-                    temp_x = self.tempdestx
-                    temp_y = self.tempdesty
-                break
+        x_diff = (dest_x + self.base_value_x) - start_x
+        y_diff = (dest_y + self.base_value_y) - start_y
+        angle = math.atan2(y_diff, x_diff)
 
-        for cube in self.cube_list:
-            if(cube.pos_x == temp_x and cube.pos_y == temp_y):
-                dest_x = cube.center_x
-                dest_y = cube.center_y
-                self.tempdestx = temp_x
-                self.tempdesty = temp_y
-                break
         
         x_diff = dest_x - start_x
         y_diff = dest_y - start_y

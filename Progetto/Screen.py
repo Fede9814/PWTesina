@@ -74,8 +74,8 @@ class window(arcade.Window):
 
     def on_draw(self):       
         arcade.start_render()
-        for cube in self.cube_list:
-            cube.recognition(cube.pos_x, cube.pos_y)
+        img_map = arcade.load_texture("../Sprites/Road_blocks/map.png")
+        img_map.draw_scaled(960, 540)
         for car in self.car_list:
             car.fov.sprite.draw()
             car.fov.stop_sprite.draw()
@@ -98,28 +98,72 @@ class window(arcade.Window):
         output_draw_time = f"Frame Count: {self.global_spawn}"
         arcade.draw_text(output_draw_time, 300, 960, arcade.color.BLACK, 25)
 
+        output_draw_time = f"Red Count: {self.frame_count}"
+        arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
+
+
+        if(self.current_status == 1 and self.yellow_start == False):
+            cube = arcade.load_texture("../Sprites/Lights/Green.png")
+            cube.draw_scaled(810, 750, angle=180)
+        elif(self.current_status == 1 and self.yellow_start == True):
+            cube = arcade.load_texture("../Sprites/Lights/Yellow.png")
+            cube.draw_scaled(810, 750, angle=180)
+        else:
+            cube = arcade.load_texture("../Sprites/Lights/Red.png")
+            cube.draw_scaled(810, 750, angle=180)
+
+        if(self.current_status == 2 and self.yellow_start == False):
+            cube = arcade.load_texture("../Sprites/Lights/Green.png")
+            cube.draw_scaled(1170, 690, angle=90)
+        elif(self.current_status == 2 and self.yellow_start == True):
+            cube = arcade.load_texture("../Sprites/Lights/Yellow.png")
+            cube.draw_scaled(1170, 690, angle=90)
+        else:
+            cube = arcade.load_texture("../Sprites/Lights/Red.png")
+            cube.draw_scaled(1170, 690, angle=90)
+
+        if(self.current_status == 3 and self.yellow_start == False):
+            cube = arcade.load_texture("../Sprites/Lights/Green.png")
+            cube.draw_scaled(1110, 330)
+        elif(self.current_status == 3 and self.yellow_start == True):
+            cube = arcade.load_texture("../Sprites/Lights/Yellow.png")
+            cube.draw_scaled(1110, 330)
+        else:
+            cube = arcade.load_texture("../Sprites/Lights/Red.png")
+            cube.draw_scaled(1110, 330)
+
+        if(self.current_status == 4 and self.yellow_start == False):
+            cube = arcade.load_texture("../Sprites/Lights/Green.png")
+            cube.draw_scaled(750, 390, angle=270)
+        elif(self.current_status == 4 and self.yellow_start == True):
+            cube = arcade.load_texture("../Sprites/Lights/Yellow.png")
+            cube.draw_scaled(750, 390, angle=270)
+        else:
+            cube = arcade.load_texture("../Sprites/Lights/Red.png")
+            cube.draw_scaled(750, 390, angle=270)
+
 
 
 
         #hours = int(self.total_execution_time) // 3600
         #minutes = int(self.total_execution_time) // 60
         #seconds = int(self.total_execution_time) % 60
- 
+   
         #elapsed_time_output = f"Elapsed Time: {hours:02d}:{minutes:02d}:{seconds:02d}"
         #arcade.draw_text(elapsed_time_output, 300, 960, arcade.color.BLACK, 25)
- 
+   
         #draw_start_time = timeit.default_timer()
- 
+   
         #output_processing_time = f"Processing time: {self.processing_time:.3f}"
         #arcade.draw_text(output_processing_time, 300, 930, arcade.color.BLACK, 25)
- 
+   
         #output_draw_time = f"Drawing time: {self.draw_time:.3f}"
         #arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
- 
+   
         #fps = self.fps.get_fps()
         #output_draw_text = f"FPS: {fps:3.0f}"
         #arcade.draw_text(output_draw_text, 300, 870, arcade.color.BLACK, 25)
- 
+   
         #self.draw_time = timeit.default_timer() - draw_start_time
         #self.fps.tick()
 
@@ -185,13 +229,10 @@ class window(arcade.Window):
         if(self.global_spawn % 50 == 0):
             self.spawn_car()
             
-
     def spawn_car(self):
         auto1 = car()
         auto1.setup(self.cube_list, self.car_list)
         self.car_list.append(auto1)
-
-
         
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F:
