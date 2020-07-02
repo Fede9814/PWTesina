@@ -25,23 +25,14 @@ class window(arcade.Window):
         self.frame_count = 0
         self.yellow_start = False
         self.yellow_count = 0
-        self.yellow_time = 20
-        self.red_time = 120
+        self.yellow_time = 30
+        self.red_time = 200
         self.global_spawn = 0
 
         self.background_music_list = []
         self.current_background_song = 0
         self.music = None
         self.BACKGROUND_MUSIC_VOLUME = 0.1
-
-        self.processing_time = 0
-        self.draw_time = 0
-        self.program_start_time = timeit.default_timer()
-        self.fps_list = []
-        self.processing_time_list = []
-        self.drawing_time_list = []
-        self.last_fps_reading = 0
-        self.fps = FPSCounter()
 
         self.results_file = open(RESULTS_FILE, "w")
 
@@ -53,10 +44,6 @@ class window(arcade.Window):
         self.background_music_list = ["../Sound/traffic.wav"]
         self.current_background_song = 0
         self.play_background_song()
-        self.total_execution_time = 0.0
-        self.processing_time = 0
-        self.processing_time_list = []
-        self.program_start_time = timeit.default_timer()
 
         y = 1050
         for j in map:
@@ -98,10 +85,6 @@ class window(arcade.Window):
         output_draw_time = f"Frame Count: {self.global_spawn}"
         arcade.draw_text(output_draw_time, 300, 960, arcade.color.BLACK, 25)
 
-        output_draw_time = f"Red Count: {self.frame_count}"
-        arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
-
-
         if(self.current_status == 1 and self.yellow_start == False):
             cube = arcade.load_texture("../Sprites/Lights/Green.png")
             cube.draw_scaled(810, 750, angle=180)
@@ -142,31 +125,6 @@ class window(arcade.Window):
             cube = arcade.load_texture("../Sprites/Lights/Red.png")
             cube.draw_scaled(750, 390, angle=270)
 
-
-
-
-        #hours = int(self.total_execution_time) // 3600
-        #minutes = int(self.total_execution_time) // 60
-        #seconds = int(self.total_execution_time) % 60
-   
-        #elapsed_time_output = f"Elapsed Time: {hours:02d}:{minutes:02d}:{seconds:02d}"
-        #arcade.draw_text(elapsed_time_output, 300, 960, arcade.color.BLACK, 25)
-   
-        #draw_start_time = timeit.default_timer()
-   
-        #output_processing_time = f"Processing time: {self.processing_time:.3f}"
-        #arcade.draw_text(output_processing_time, 300, 930, arcade.color.BLACK, 25)
-   
-        #output_draw_time = f"Drawing time: {self.draw_time:.3f}"
-        #arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
-   
-        #fps = self.fps.get_fps()
-        #output_draw_text = f"FPS: {fps:3.0f}"
-        #arcade.draw_text(output_draw_text, 300, 870, arcade.color.BLACK, 25)
-   
-        #self.draw_time = timeit.default_timer() - draw_start_time
-        #self.fps.tick()
-
     def advance_song(self):
         self.current_background_song += 1
         if self.current_background_song >= len(self.background_music_list):
@@ -179,23 +137,6 @@ class window(arcade.Window):
             self.advance_song()
             self.play_background_song()
 
-        self.total_execution_time += delta_time
-
-        start_time = timeit.default_timer()
-        self.processing_time = timeit.default_timer() - start_time
-        total_program_time = int(timeit.default_timer() - self.program_start_time)
-        if total_program_time > self.last_fps_reading:
-            self.last_fps_reading = total_program_time
-            if total_program_time > 5:
-                if total_program_time % 2 == 1:
-                    output = f"{total_program_time}, {self.fps.get_fps():.1f}, " \
-                            f"{self.processing_time:.4f}, {self.draw_time:.4f}\n"
-
-                    self.results_file.write(output)
-
-                self.fps_list.append(round(self.fps.get_fps(), 1))
-                self.processing_time_list.append(self.processing_time)
-                self.drawing_time_list.append(self.draw_time)
         if(self.frame_count % self.red_time == 0 and self.frame_count != 0):
             self.yellow_start = True
             if(self.yellow_count == 0):
