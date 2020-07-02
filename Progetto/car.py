@@ -1,11 +1,13 @@
 import arcade
 import math
 import os
+from threading import Thread 
 import numpy
 import random
 import screen
 from fov import *
 import datetime
+pyodbc.pooling = False
 
 incidenti = 0
 
@@ -60,9 +62,9 @@ class car(arcade.Sprite):
         self.TIR_MUSIC_VOLUME = 0.1
         self.BIKE_MUSIC_VOLUME = 0.1
 
-    def draw(self):
-        output_draw_time = f"Incidenti: {incidenti}"
-        arcade.draw_text(output_draw_time, 300, 930, arcade.color.BLACK, 25)
+    def get_incidenti(self):
+        return incidenti
+        
         
     def setup(self, cube_list, car_list):
         self.cube_list = cube_list
@@ -76,6 +78,8 @@ class car(arcade.Sprite):
         self.bike_music_list = ["../Sound/3_burn.wav"]
         self.db_info()
         self.queryThis()
+          
+        
         self.timer_start = datetime.datetime.now().replace(microsecond=0)
 
     def time_service (self, hour, minute, second):
@@ -198,11 +202,14 @@ class car(arcade.Sprite):
         self.cursor = cursor
         self.cursor.execute("INSERT INTO dbo.Car_Information (IDVehicle, Plate, Gender, Age, Name, Surname, Region, Model, Displacement, CarTax, Insurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (self.car_information[0], self.car_information[1], self.car_information[2], self.car_information[3], self.car_information[4], self.car_information[5], self.car_information[6], self.car_information[7], self.car_information[8], self.car_information[9], self.car_information[10]))
         cursor.commit()
-
+        cursor.cancel()
+        
     def queryEnd(self, pos, cors):
         self.cursor = cursor
         self.cursor.execute("INSERT INTO dbo.Car_Result (Vehicle, StartTime, EndTime, Collision, StartDirection, EndDirection, StartLane, EndLane) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (self.car_information[0], self.start_time, self.end_time, str(self.collision), self.cube_start_pos, pos, self.cube_start_cors, cors))
         cursor.commit()
+        cursor.cancel()
+    
 
     def play_car_song(self):
         self.car_music = arcade.Sound(self.car_music_list[self.current_car_song], streaming=True)
@@ -250,8 +257,9 @@ class car(arcade.Sprite):
                                 car.play_tir_song()
                             elif self.filename == "../Sprites/Car/bike_1.png" or self.filename == "../Sprites/Car/bike_2.png" or self.filename == "../Sprites/Car/bike_3.png":
                                 car.play_bike_song()
-                            self.queryEnd("", "") 
-                            car.queryEnd("", "")
+                            self.queryEnd("", "")
+                            car.queryEnd("", "")                          
+                            
                             self.kill()
                             car.kill()
 

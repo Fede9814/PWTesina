@@ -1,4 +1,5 @@
 import arcade
+import asyncio
 import os
 import pyglet
 import time
@@ -29,7 +30,7 @@ class window(arcade.Window):
         self.yellow_time = 30
         self.red_time = 200
         self.global_spawn = 0
-        self.hour = 0
+        self.hour = 20
         self.timer_start = None
         self.timer_now = None
         self.timer_result = None
@@ -39,6 +40,9 @@ class window(arcade.Window):
         self.timer_string_min = "00"
         self.timer_string_sec = "00"
         self.total_car = 0
+        self.total_car_min = 0
+        self.spawn_rate = 0
+        self.incidenti_min = 0
 
         self.background_music_list = []
         self.current_background_song = 0
@@ -71,6 +75,7 @@ class window(arcade.Window):
         auto.time_service(self.hour, self.timer_minute, self.timer_second)
         self.car_list.append(auto)
         self.total_car += 1
+        self.total_car_min += 1
         
         self.timer_start = datetime.datetime.now().replace(microsecond=0)
 
@@ -81,9 +86,13 @@ class window(arcade.Window):
         for car in self.car_list:
             car.fov.sprite.draw()
             car.fov.stop_sprite.draw()
-        self.car_list.draw()
 
-        self.car_list[0].draw()
+        self.car_list.draw()
+        try:
+            self.incidenti = self.car_list[0].get_incidenti()
+            self.incidenti_min = self.incidenti
+        except:
+            self.incidenti = self.incidenti
         
         height = 990
         val = 0
@@ -102,6 +111,9 @@ class window(arcade.Window):
 
         output_draw_time = f"Frame Count: {self.global_spawn}"
         arcade.draw_text(output_draw_time, 300, 960, arcade.color.BLACK, 25)
+
+        output_draw_time = f"Incidenti: {self.incidenti}"
+        arcade.draw_text(output_draw_time, 300, 930, arcade.color.BLACK, 25)
 
         output_draw_time = f"Cronometro: {self.hour}:{self.timer_string_min}:{self.timer_string_sec}"
         arcade.draw_text(output_draw_time, 300, 900, arcade.color.BLACK, 25)
@@ -152,6 +164,14 @@ class window(arcade.Window):
         if self.current_background_song >= len(self.background_music_list):
             self.current_background_song = 0
 
+    def query_5_min(self):
+        self.cursor = cursor
+        self.cursor.execute("INSERT INTO dbo.ClockTable (NVehicle, Hours, Collision) VALUES (?, ?, ?)", (self.total_car_min, self.hour, self.incidenti_min))
+        cursor.commit()
+        cursor.cancel()
+        self.incidenti_min = 0
+        self.total_car_min = 0
+
     def on_update(self, delta_time=0.50):
 
 
@@ -168,6 +188,10 @@ class window(arcade.Window):
         if(self.timer_second == 59):
             self.timer_second = 0
             self.timer_minute = self.timer_minute + 1
+            if(self.timer_minute % 5 == 0):
+                self.query_5_min()
+                if(self.hour <= 23):
+                    self.hour += 1
             if(self.timer_minute <= 9):
                 self.timer_string_min = "0" + str(self.timer_minute)
             else:
@@ -209,7 +233,26 @@ class window(arcade.Window):
             car.fov.sprite.update()
             car.fov.stop_sprite.update()
 
-        if(self.global_spawn % 100 == 0):
+        if(self.hour == 1 or self.hour == 2 or self.hour == 3 or self.hour == 4):
+            self.spawn_rate = 1500
+        elif(self.hour == 5 or self.hour == 0):
+            self.spawn_rate = 750
+        elif(self.hour == 6 or self.hour == 23):
+            self.spawn_rate = 500
+        elif(self.hour == 7 or self.hour == 11 or self.hour == 22):
+            self.spawn_rate = 300
+        elif(self.hour == 8 or self.hour == 10 or self.hour == 16 or self.hour == 21):
+            self.spawn_rate = 200
+        elif(self.hour == 9 or self.hour == 20):
+            self.spawn_rate = 150
+        elif(self.hour == 15 or self.hour == 17 or self.hour == 19):
+            self.spawn_rate = 125
+        elif(self.hour == 12 or self.hour == 14 or self.hour == 18):
+            self.spawn_rate = 100
+        elif(self.hour == 13):
+            self.spawn_rate = 75
+
+        if(self.global_spawn % self.spawn_rate == 0):
             self.spawn_car()
             
     def spawn_car(self):
@@ -218,6 +261,7 @@ class window(arcade.Window):
         auto.time_service(self.hour, self.timer_minute, self.timer_second)
         self.car_list.append(auto)
         self.total_car += 1
+        self.total_car_min += 1
 
 
         
@@ -248,6 +292,7 @@ class window(arcade.Window):
             auto.time_service(self.hour, self.timer_minute, self.timer_second)
             self.car_list.append(auto)
             self.total_car += 1
+            self.total_car_min += 1
 
         if key == arcade.key.P:
             auto = car()
@@ -257,6 +302,7 @@ class window(arcade.Window):
             auto.time_service(self.hour, self.timer_minute, self.timer_second)
             self.car_list.append(auto)
             self.total_car += 1
+            self.total_car_min += 1
 
         if key == arcade.key.UP:
             if(self.hour < 23):
@@ -266,6 +312,8 @@ class window(arcade.Window):
                 self.timer_minute = 0
                 self.timer_string_min = "00"
                 self.timer_string_sec = "00"
+                self.incidenti_min = 0
+                self.total_car_min = 0
 
         if key == arcade.key.DOWN:
             if(self.hour > 0):
@@ -275,6 +323,8 @@ class window(arcade.Window):
                 self.timer_minute = 0
                 self.timer_string_min = "00"
                 self.timer_string_sec = "00"
+                self.incidenti_min = 0
+                self.total_car_min = 0
             
 
     def set_update_rate(self, rate: float):

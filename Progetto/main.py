@@ -3,7 +3,7 @@ from map import *
 from screen import *
 from car import *
 
-window = window()
+window = window() 
 window.setup()
 
 arcade.run()
