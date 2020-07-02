@@ -78,6 +78,8 @@ class fov(arcade.PhysicsEngineSimple):
         self.stop_sprite.center_x = pcx
         self.stop_sprite.center_y = pcy
 
+    
+
     def center_calc(self, car):
         punto_a = car.points[1]
         punto_b = car.points[3]
@@ -91,7 +93,6 @@ class fov(arcade.PhysicsEngineSimple):
         punto_c_y = (punto_a_y + punto_b_y)/2
 
         return punto_c_x, punto_c_y
-
 
     def move(self):
         pcx, pcy = self.center_calc(self.car)
@@ -152,19 +153,4 @@ class fov(arcade.PhysicsEngineSimple):
             skip_collision = False
 
         return skip_collision
-    
-"""        self.Json_car =  {
-                "CarBirthTime":     self.Birth,
-                "IDVehicle" :       self.VehicleID,
-                "Gender":           self.pilot_sex,
-                "Age":              self.true_age,
-                "Name":             self.pilot_name,
-                "Surname":          self.pilot_surname,
-                "Plate":            self.plate,
-                "Region":           self.region,
-                "Model" :           self.car_model,
-                "Displacement" :    self.Displacement,
-                "CarTax" :          self.Tax_status,
-                "Insurance" :       self.Insurance_status,
-                }
-"""
+        

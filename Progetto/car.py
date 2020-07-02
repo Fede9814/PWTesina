@@ -41,7 +41,7 @@ class car(arcade.Sprite):
         self.my_cube = None
         self.in_transit = False
         self.stop_cube = None
-        self.initial_speed_range = [210, 240, 270, 300, 330]
+        self.initial_speed_range = [180, 210, 240, 270, 300]
         self.initial_speed = numpy.random.choice(self.initial_speed_range, p = [0.2, 0.2, 0.2, 0.2, 0.2])
         self.speed = self.initial_speed
         self.base_value_x = 0
