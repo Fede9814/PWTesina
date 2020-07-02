@@ -4,6 +4,10 @@ import names
 import numpy
 import json
 import math
+import datetime
+
+ora = datetime.datetime.hour()
+print(ora)
 
 """""""""plate_chars = []
 
@@ -157,7 +161,7 @@ print(Tax_status)
 Insurance_status_list = ["Paid", "Unpaid"]
 Insurance_status = numpy.random.choice(Insurance_status_list, p = [0.95, 0.05])
 print(Insurance_status)"""
-
+"""
 ID_Chars = []
 IDChars = string.ascii_uppercase
 ID_Numbers = random.randint(1000, 9999)
@@ -166,3 +170,4 @@ ID_Chars.append(IDChar)
 ID_Chars.append(ID_Numbers)
 IDVehicle = ''.join(ID_Chars)
 print(IDVehicle)
+"""
