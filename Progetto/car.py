@@ -24,16 +24,15 @@ imagelist = [
     "../Sprites/Car/car_5.png",
     "../Sprites/Car/TIR_1.png",
     "../Sprites/Car/TIR_2.png",
-    "../Sprites/Car/TIR_3.png"
-    #"../Sprites/Car/bike_1.png",
-    #"../Sprites/Car/bike_2.png",
-    #"../Sprites/Car/bike_3.png"
+    "../Sprites/Car/TIR_3.png",
+    "../Sprites/Car/bike_1.png",
+    "../Sprites/Car/bike_2.png",
     ]
 
 class car(arcade.Sprite):
     def __init__(self):
         super().__init__()
-        self.filename = numpy.random.choice(imagelist, p = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125])
+        self.filename = numpy.random.choice(imagelist, p = [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10])
         self.texture = arcade.load_texture(self.filename)
         self.telaio = numpy.random.randint(0, 1000000, 1)
         self.frame_up = True
@@ -243,7 +242,7 @@ class car(arcade.Sprite):
                 if(car.telaio != self.telaio):
                     if arcade.check_for_collision(self, car):
                         in_range = True
-                        self.end_time = str(self.hour) + ":" + str(self.timer_minute) + ":" + str(self.timer_second)
+                        self.end_time = "00" + ":" + str(self.timer_minute) + ":" + str(self.timer_second)
                         if(self.frame_count > self.despawn_count):
                             if self.filename == "../Sprites/Car/car_1.png" or self.filename == "../Sprites/Car/car_2.png" or self.filename == "../Sprites/Car/car_3.png" or self.filename == "../Sprites/Car/car_4.png" or self.filename == "../Sprites/Car/car_5.png":
                                 car.play_car_song()
@@ -378,7 +377,7 @@ class car(arcade.Sprite):
                             self.cube_start_pos = cube.pos
                             self.cube_start_cors = cube.cors
                         if(cube.name == "exit"):
-                            self.end_time = str(self.hour) + ":" + str(self.timer_minute) + ":" + str(self.timer_second)
+                            self.end_time = "00" + ":" + str(self.timer_minute) + ":" + str(self.timer_second)
                             self.queryEnd(cube.pos, cube.cors)
                             self.kill()
                         if(cube.name == "strada" or cube.name == "start"):

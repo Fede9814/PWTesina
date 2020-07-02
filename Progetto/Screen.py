@@ -38,6 +38,7 @@ class window(arcade.Window):
         self.timer_minute = 0
         self.timer_string_min = "00"
         self.timer_string_sec = "00"
+        self.total_car = 0
 
         self.background_music_list = []
         self.current_background_song = 0
@@ -69,6 +70,7 @@ class window(arcade.Window):
         auto.setup(self.cube_list, self.car_list)
         auto.time_service(self.hour, self.timer_minute, self.timer_second)
         self.car_list.append(auto)
+        self.total_car += 1
         
         self.timer_start = datetime.datetime.now().replace(microsecond=0)
 
@@ -92,7 +94,10 @@ class window(arcade.Window):
         #        output_draw_time = f"Velocita veicoli: {i.probability_change}"
         #        arcade.draw_text(output_draw_time, 300, height, arcade.color.BLACK, 25)
 
-        output_draw_time = f"Numero Veicoli: {val}"
+        output_draw_time = f"Numero Veicoli Totali: {self.total_car}"
+        arcade.draw_text(output_draw_time, 300, 1020, arcade.color.BLACK, 25)
+
+        output_draw_time = f"Numero Veicoli Nell'Incrocio: {val}"
         arcade.draw_text(output_draw_time, 300, 990, arcade.color.BLACK, 25)
 
         output_draw_time = f"Frame Count: {self.global_spawn}"
@@ -204,7 +209,7 @@ class window(arcade.Window):
             car.fov.sprite.update()
             car.fov.stop_sprite.update()
 
-        if(self.global_spawn % 50 == 0):
+        if(self.global_spawn % 100 == 0):
             self.spawn_car()
             
     def spawn_car(self):
@@ -212,6 +217,7 @@ class window(arcade.Window):
         auto.setup(self.cube_list, self.car_list)
         auto.time_service(self.hour, self.timer_minute, self.timer_second)
         self.car_list.append(auto)
+        self.total_car += 1
 
 
         
@@ -241,6 +247,7 @@ class window(arcade.Window):
             auto.setup(self.cube_list, self.car_list)
             auto.time_service(self.hour, self.timer_minute, self.timer_second)
             self.car_list.append(auto)
+            self.total_car += 1
 
         if key == arcade.key.P:
             auto = car()
@@ -249,6 +256,7 @@ class window(arcade.Window):
             auto.setup(self.cube_list, self.car_list)
             auto.time_service(self.hour, self.timer_minute, self.timer_second)
             self.car_list.append(auto)
+            self.total_car += 1
 
         if key == arcade.key.UP:
             if(self.hour < 23):
