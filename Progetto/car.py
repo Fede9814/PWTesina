@@ -1,7 +1,6 @@
 import arcade
 import math
 import os
-from threading import Thread 
 import numpy
 import random
 import Screen
