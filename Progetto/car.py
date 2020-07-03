@@ -98,10 +98,21 @@ class car(arcade.Sprite):
         #VehicleID
         ID_Chars = []
         IDChars = string.ascii_uppercase
-        ID_Numbers = str(random.randint(1000, 9999))
+        IDChars2 = string.ascii_uppercase
+        IDChars3 = string.ascii_uppercase
+        
+        ID_Numbers = str(random.randint(1, 99999))
+        ID_Numbers2 = str(random.randint(1, 99999))
+
         IDChar = random.choice(IDChars)
+        IDChar2 = random.choice(IDChars2)
+        IDChar3 = random.choice(IDChars3)
+        
         ID_Chars.append(IDChar)
         ID_Chars.append(ID_Numbers)
+        ID_Chars.append(IDChar2)
+        ID_Chars.append(ID_Numbers2)
+        ID_Chars.append(IDChar3)
         IDVehicle = str(''.join(ID_Chars))
         self.car_information.append(IDVehicle)
 
