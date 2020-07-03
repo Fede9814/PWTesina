@@ -1,7 +1,6 @@
 import arcade
 import math
 import os
-from threading import Thread 
 import numpy
 import random
 import screen
@@ -74,8 +73,8 @@ class car(arcade.Sprite):
         self.fov = fov(self.center_x, self.center_y, self.angle, self)
         self.fov.setup()
         self.car_music_list = ["../Sound/1_crash.wav"]
-        self.tir_music_list = ["../Sound/2_splat.wav"]
-        self.bike_music_list = ["../Sound/3_burn.wav"]
+        self.tir_music_list = ["../Sound/1_crash.wav"]
+        self.bike_music_list = ["../Sound/1_crash.wav"]
         self.db_info()
         self.queryThis()
           

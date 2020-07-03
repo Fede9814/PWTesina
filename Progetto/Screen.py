@@ -27,8 +27,8 @@ class window(arcade.Window):
         self.frame_count = 0
         self.yellow_start = False
         self.yellow_count = 0
-        self.yellow_time = 30
-        self.red_time = 200
+        self.yellow_time = 60
+        self.red_time = 240
         self.global_spawn = 0
         self.hour = 20
         self.timer_start = None
@@ -47,7 +47,7 @@ class window(arcade.Window):
         self.background_music_list = []
         self.current_background_song = 0
         self.music = None
-        self.BACKGROUND_MUSIC_VOLUME = 0
+        self.BACKGROUND_MUSIC_VOLUME = 0.01
 
         self.results_file = open(RESULTS_FILE, "w")
 
@@ -190,8 +190,6 @@ class window(arcade.Window):
             self.timer_minute = self.timer_minute + 1
             if(self.timer_minute % 5 == 0):
                 self.query_5_min()
-                if(self.hour <= 23):
-                    self.hour += 1
             if(self.timer_minute <= 9):
                 self.timer_string_min = "0" + str(self.timer_minute)
             else:
